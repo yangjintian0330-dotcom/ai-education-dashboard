@@ -11,6 +11,8 @@ assert.match(regional, /<h2>学校对话次数<\/h2>/);
 assert.match(regional, /<h2>学校生成任务数<\/h2>/);
 assert.match(regional, /id="school-dialogue-list" class="cap-list"/);
 assert.match(regional, /id="school-task-list" class="cap-list"/);
+assert.match(regional, /id="school-dialogue-list-pager" class="pager"/);
+assert.match(regional, /id="school-task-list-pager" class="pager"/);
 assert.match(regional, /\.right-focus > article:not\(\.school-metric\)\{display:none\}/);
 assert.match(regional, /renderSchoolMetric\('school-dialogue-list'/);
 assert.match(regional, /renderSchoolMetric\('school-task-list'/);
