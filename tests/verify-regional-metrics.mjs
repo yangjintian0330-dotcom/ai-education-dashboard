@@ -14,6 +14,7 @@ assert.deepEqual(
   ['使用学校数', '活跃老师数', 'AI 生成任务数量', 'AI 对话次数'],
 );
 assert.doesNotMatch(metrics, /id="students"/);
+assert.doesNotMatch(metrics, /<i>|↑|%/);
 assert.doesNotMatch(regional, /animateNumber\('students'/);
 
 for (const id of ['schools', 'teachers', 'tasks', 'services']) {
