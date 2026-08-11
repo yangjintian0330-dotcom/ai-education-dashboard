@@ -11,6 +11,9 @@ assert.match(regional, /\.cap-list\{[^}]*grid-auto-rows:104px/);
 assert.match(regional, /\.cap-list\{[^}]*overflow-y:auto/);
 assert.match(regional, /overscroll-behavior:contain/);
 assert.match(regional, /\.cap-row\{[^}]*grid-template-rows:28px 12px/);
+assert.match(regional, /<h2>学校使用老师数<\/h2>/);
+assert.match(regional, /id="school-teacher-list" class="cap-list"/);
 assert.match(regional, /<article class="panel capability">/);
+assert.doesNotMatch(regional, /id="cap-period"/);
 
 console.log('Regional left panel verification passed.');
