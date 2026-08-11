@@ -7,16 +7,16 @@ const end = source.indexOf(';const escapedCloseTag', start);
 const regional = JSON.parse(source.slice(start, end)).regional;
 const metrics = regional.match(/<section class="metrics">([\s\S]*?)<\/section>/)?.[1] ?? '';
 
-assert.match(regional, /\.metrics\{[^}]*grid-template-columns:repeat\(3,1fr\)/);
-assert.equal((metrics.match(/class="metric"/g) ?? []).length, 3);
+assert.match(regional, /\.metrics\{[^}]*grid-template-columns:repeat\(4,1fr\)/);
+assert.equal((metrics.match(/class="metric"/g) ?? []).length, 4);
 assert.deepEqual(
   [...metrics.matchAll(/<span>([^<]+)/g)].map(match => match[1]),
-  ['使用学校数', '活跃老师数', 'AI 对话次数'],
+  ['使用学校数', '活跃老师数', 'AI 生成任务数量', 'AI 对话次数'],
 );
 assert.doesNotMatch(metrics, /id="students"/);
 assert.doesNotMatch(regional, /animateNumber\('students'/);
 
-for (const id of ['schools', 'teachers', 'services']) {
+for (const id of ['schools', 'teachers', 'tasks', 'services']) {
   assert.match(regional, new RegExp(`animateNumber\\('${id}'`));
 }
 
