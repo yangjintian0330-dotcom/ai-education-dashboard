@@ -7,17 +7,17 @@ const end = source.indexOf(';const escapedCloseTag', start);
 const regional = JSON.parse(source.slice(start, end)).regional;
 const metrics = regional.match(/<section class="metrics">([\s\S]*?)<\/section>/)?.[1] ?? '';
 
-assert.match(regional, /\.metrics\{[^}]*grid-template-columns:repeat\(4,1fr\)/);
-assert.equal((metrics.match(/class="metric"/g) ?? []).length, 4);
+assert.match(regional, /\.metrics\{[^}]*grid-template-columns:repeat\(5,1fr\)/);
+assert.equal((metrics.match(/class="metric"/g) ?? []).length, 5);
 assert.deepEqual(
   [...metrics.matchAll(/<span>([^<]+)/g)].map(match => match[1]),
-  ['使用学校数', '活跃老师数', 'AI 生成任务数量', 'AI 对话次数'],
+  ['使用学校数', '活跃老师数', 'AI 生成任务数量', 'AI 对话次数', '区域资源沉淀'],
 );
 assert.doesNotMatch(metrics, /id="students"/);
 assert.doesNotMatch(metrics, /<i>|↑|%/);
 assert.doesNotMatch(regional, /animateNumber\('students'/);
 
-for (const id of ['schools', 'teachers', 'tasks', 'services']) {
+for (const id of ['schools', 'teachers', 'tasks', 'services', 'resources']) {
   assert.match(regional, new RegExp(`animateNumber\\('${id}'`));
 }
 
