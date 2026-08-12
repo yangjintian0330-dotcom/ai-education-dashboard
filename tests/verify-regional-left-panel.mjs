@@ -20,6 +20,7 @@ assert.match(regional, /<h2>学校使用老师数<\/h2>/);
 assert.match(regional, /id="school-teacher-list" class="cap-list"/);
 assert.match(regional, /id="school-teacher-list-pager" class="pager"/);
 assert.match(regional, /<article class="panel capability">/);
+assert.match(regional, /\.grid > aside:first-child > \.school-metric\{order:2\}/);
 assert.doesNotMatch(regional, /id="cap-period"/);
 
 console.log('Regional left panel verification passed.');
