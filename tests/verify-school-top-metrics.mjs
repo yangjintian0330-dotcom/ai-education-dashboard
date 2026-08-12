@@ -11,5 +11,7 @@ assert.match(metrics, /<label>AI 对话次数<\/label>/);
 assert.doesNotMatch(metrics, /↑|服务学生|校本资源沉淀/);
 assert.match(html, /\.metrics\{grid-template-columns:repeat\(3,1fr\)/);
 assert.match(html, /const metricValues=\[62,15241,3817\]/);
+assert.doesNotMatch(html, /飞象老师校园版 · 学校实时画像/);
+assert.doesNotMatch(html, />实时在线</);
 
 console.log('school top metrics verified');
