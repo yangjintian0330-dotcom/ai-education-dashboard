@@ -9,12 +9,13 @@ const regional = JSON.parse(shell.slice(start, end)).regional;
 
 for (const html of [regional, school]) {
   assert.match(html, /\.top\{[^}]*height:76px/);
-  assert.match(html, /\.metrics\{[^}]*height:110px/);
-  assert.match(html, /\.metric strong\{[^}]*45px/);
   assert.match(html, /\.phead\{[^}]*height:45px/);
   assert.match(html, /\.phead h2\{[^}]*font-size:16px/);
   assert.match(html, /\.pager\{[^}]*height:34px/);
 }
+assert.match(regional, /\.metrics\{[^}]*height:110px/);
+assert.match(regional, /\.metric strong\{[^}]*45px/);
+assert.doesNotMatch(school, /<section class="metrics">/);
 
 assert.match(shell, /pages\.regional = pages\.regional\.replace/);
 assert.match(shell, /\.metric strong\{color:#ad91ff;text-shadow:0 0 16px rgba\(158,130,255,\.3\)\}/);
