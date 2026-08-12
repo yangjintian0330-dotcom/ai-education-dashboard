@@ -11,5 +11,8 @@ for (const label of ['使用老师数', 'AI 对话次数', 'AI 生成任务数',
 }
 assert.match(html, /使用驱动沉淀 · 沉淀促进复用/);
 assert.doesNotMatch(html, /class="wheel-tag t5"/);
+assert.match(html, /const metricValues=\[62,15241,3817,1634\]/);
+assert.match(html, /const flywheelValues=\[metricValues\[0\],metricValues\[2\],metricValues\[1\],metricValues\[3\]\]/);
+assert.match(html, /querySelectorAll\('\[data-flywheel-value\]'\)/);
 
 console.log('school flywheel structure verified');
