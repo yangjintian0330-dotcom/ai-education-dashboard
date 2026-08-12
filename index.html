@@ -7,6 +7,10 @@
   window.currentSchool = '虹口区实验学校';
   window.showView = function (name, schoolName) {
     if (schoolName) window.currentSchool = String(schoolName);
+    if (name === 'school') {
+      window.location.href = `school-dashboard/?school=${encodeURIComponent(window.currentSchool)}`;
+      return;
+    }
     document.getElementById('view').srcdoc = pages[name];
   };
   // 区域地图的信息卡由高德动态插入；在捕获阶段从卡片标题取校名，
