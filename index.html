@@ -8,6 +8,38 @@
     '.metric:nth-child(n+3) strong{color:#ad91ff;text-shadow:0 0 18px rgba(158,130,255,.3)}',
     '.metric strong{color:#ad91ff;text-shadow:0 0 16px rgba(158,130,255,.3)}'
   );
+  pages.regional = pages.regional.replace('</style>', `<style>
+    .link-feed{width:620px;height:158px;gap:5px}
+    .link-item{flex:0 0 26px;height:26px;gap:0;padding:0 10px;border-left-color:#41d4f5;background:linear-gradient(90deg,rgba(16,32,72,.94),rgba(16,25,58,.74) 68%,transparent);font-size:10px}
+    .link-item::before{margin-right:8px;background:#42d4f5;box-shadow:0 0 8px #42d4f5}
+    .query-school,.query-teacher{display:inline-flex;align-items:center;flex:0 0 auto;height:18px;white-space:nowrap}
+    .query-school{max-width:142px;overflow:hidden;color:#8ee9ff;font-weight:700;text-overflow:ellipsis}
+    .query-teacher{margin-left:8px;padding-left:8px;border-left:1px solid rgba(158,130,255,.38);color:#c4b3ff;font-weight:700}
+    .query-content{min-width:0;margin-left:9px;overflow:hidden;color:rgba(239,245,255,.9);font-size:11px;white-space:nowrap;text-overflow:ellipsis}
+    .query-content::before{content:'“';color:#6fdcf7}.query-content::after{content:'”';color:#6fdcf7}
+  </style></style>`);
+  const queryFeedReplacements = [
+    ["['虹口区实验学校','王老师刚完成「语文」AI 教学设计，并同步至区域资源库']", "['虹口区实验学校','王老师','你帮我生成一个八年级语文教学课件']"],
+    ["['上海市鲁迅初级中学','八年级学生正在使用 AI 讲解完成错因复盘']", "['上海市鲁迅初级中学','李老师','请生成一套数学分层练习题']"],
+    ["['教育学院实验中学','科学实验报告已发布，等待跨校教师引用']", "['教育学院实验中学','陈老师','帮我设计一节科学实验探究课']"],
+    ["['上海市北郊学校','新增 4 份互动课件，已进入区域资源沉淀池']", "['上海市北郊学校','周老师','生成一个英语词汇闯关游戏']"],
+    ["['上海市继光初级中学','李老师完成「英语」词汇闯关应用并发布']", "['上海市继光初级中学','吴老师','帮我制作一个英语单词记忆游戏']"],
+    ["['上海市丰镇中学','七年级正在使用几何助教完成图形推演']", "['上海市丰镇中学','孙老师','解释一下三角形全等的判定方法']"],
+    ["['上海市钟山初级中学','陈老师将 2 份题单沉淀至校本资源库']", "['上海市钟山初级中学','陈老师','生成一份函数单元测试题']"],
+    ["['上海市江湾初级中学','AI 作文陪练新增 18 次学生有效对话']", "['上海市江湾初级中学','赵老师','分析这篇作文并给出修改建议']"],
+    ["['上海市曲阳第二中学','教研组复用了「实验报告生成器」']", "['上海市曲阳第二中学','黄老师','帮我生成一份化学实验报告模板']"],
+    ["['上海市澄衷初级中学','物理错因讲解已被 3 位教师调用']", "['上海市澄衷初级中学','刘老师','讲解这道物理题的错误原因']"],
+    ["['上海市海南中学','刘老师发布跨学科案例分析资源包']", "['上海市海南中学','顾老师','设计一个跨学科项目学习方案']"],
+    ["['华东师范大学第一附属初级中学','学生完成 AI 视频讲解的知识点复盘']", "['华东师范大学第一附属初级中学','张老师','生成一个知识点复习视频脚本']"]
+  ];
+  queryFeedReplacements.forEach(([before, after]) => pages.regional = pages.regional.replace(before, after));
+  pages.regional = pages.regional.replace(
+    "const [school, detail] = events[index++ % events.length];",
+    "const [school, teacher, query] = events[index++ % events.length];"
+  ).replace(
+    "item.innerHTML = `<b>${school}</b><span>${detail}</span>`;",
+    "item.innerHTML = '<b class=\"query-school\">'+school+'</b><b class=\"query-teacher\">'+teacher+'</b><span class=\"query-content\">'+query+'</span>';"
+  );
   document.getElementById('view').srcdoc = pages.regional;
 
   // srcdoc 子页面只能通过 parent 的公开属性读取当前学校；不能依赖顶层 let 变量。
