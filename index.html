@@ -34,6 +34,29 @@
   ];
   queryFeedReplacements.forEach(([before, after]) => pages.regional = pages.regional.replace(before, after));
   pages.regional = pages.regional.replace(
+    `<section class="metrics">
+      <div class="metric"><strong id="schools">153</strong><em>所</em><span>使用学校数</span></div>
+      <div class="metric"><strong id="teachers">752</strong><em>人</em><span>活跃老师数</span></div>
+      <div class="metric"><strong id="tasks">28,940</strong><em>个</em><span>AI 生成任务数量</span></div>
+      <div class="metric"><strong id="services">104,752</strong><em>次</em><span>AI 对话次数</span></div>
+      <div class="metric"><strong id="resources">7,760</strong><em>份</em><span>区域资源沉淀</span></div>
+    </section>`,
+    `<section class="metrics metric-definitions">
+      <div class="metric metric-school"><strong id="schools">153</strong><em>所</em><span>AI 应用学校数</span><small id="school-coverage">区域学校覆盖率 85%</small></div>
+      <div class="metric metric-teacher"><strong id="teachers">752</strong><em>人</em><span>AI 赋能老师数</span><small>发生 AI 对话的去重老师</small></div>
+      <div class="metric metric-dialogue"><strong id="services">104,752</strong><em>次</em><span>AI 辅助工作数</span><small>累计 AI 对话次数</small></div>
+      <div class="metric metric-task"><strong id="tasks">28,940</strong><em>个</em><span>AI 执行任务数</span><small>课件 · 资源 · 题单等</small></div>
+      <div class="metric metric-resource"><strong id="resources">7,760</strong><em>项</em><span>AI 资源沉淀数</span><small>知识库 · 资源中心 · 应用中心 · 题库</small></div>
+    </section>`
+  );
+  pages.regional = pages.regional.replace(
+    "animateNumber('schools', 153 * Math.max(.35, Math.min(1, days / 30)));",
+    "const coveredSchools=Math.round(153*Math.max(.35,Math.min(1,days/30)));animateNumber('schools',coveredSchools);$('school-coverage').textContent='区域学校覆盖率 '+Math.round(coveredSchools/180*100)+'%';"
+  );
+  pages.regional = pages.regional.replace('</body>', `<style>
+    .metric-definitions{height:116px;padding:14px 0 9px}.metric-definitions .metric{padding:0 12px}.metric-definitions .metric::before{width:46px}.metric-definitions .metric strong{font-size:40px}.metric-definitions .metric span{margin-top:7px;color:#e5edff;font-size:13px;font-weight:700;letter-spacing:.3px}.metric-definitions .metric small{display:block;max-width:230px;margin:5px auto 0;overflow:hidden;color:rgba(184,205,244,.55);font-size:9px;line-height:1.25;white-space:nowrap;text-overflow:ellipsis}.metric-definitions .metric-school small{width:max-content;padding:3px 8px;border:1px solid rgba(47,213,182,.3);border-radius:10px;background:rgba(47,213,182,.08);color:#76e3cf}.metric-definitions .metric-dialogue strong{color:#58d7f5}.metric-definitions .metric-task strong{color:#a991ff}.metric-definitions .metric-resource strong{color:#f0c96c}
+  </style></body>`);
+  pages.regional = pages.regional.replace(
     "const [school, detail] = events[index++ % events.length];",
     "const [school, teacher, query] = events[index++ % events.length];"
   ).replace(
