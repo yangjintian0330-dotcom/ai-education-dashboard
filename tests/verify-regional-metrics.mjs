@@ -7,15 +7,15 @@ const end = source.indexOf(';const escapedCloseTag', start);
 const regional = JSON.parse(source.slice(start, end)).regional;
 const metrics = regional.match(/<section class="metrics">([\s\S]*?)<\/section>/)?.[1] ?? '';
 
-assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(4,1fr\)/);
+assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(5,1fr\)/);
 assert.equal((metrics.match(/class="metric"/g) ?? []).length, 5);
-for (const label of ['应用学校数', '赋能老师数', '辅助工作数', '资产沉淀']) {
+for (const label of ['应用学校数', '赋能老师数', '辅助工作数', '执行任务数', '资产沉淀']) {
   assert.match(source, new RegExp(label));
 }
 assert.doesNotMatch(metrics, /id="students"/);
 const finalMetrics = source.match(/<section class="metrics metric-definitions">[\s\S]*?<\/section>/)?.[0] ?? '';
 assert.doesNotMatch(finalMetrics, /<small|覆盖率|去重老师|去重统计/);
-assert.doesNotMatch(finalMetrics, /执行任务数|资源沉淀数|资源复用数/);
+assert.doesNotMatch(finalMetrics, /资源沉淀数|资源复用数/);
 assert.doesNotMatch(regional, /animateNumber\('students'/);
 
 for (const id of ['schools', 'teachers', 'services', 'tasks', 'resources']) {

@@ -49,6 +49,7 @@
       <div class="metric metric-school"><strong id="schools">153</strong><em>所</em><span>应用学校数</span></div>
       <div class="metric metric-teacher"><strong id="teachers">752</strong><em>人</em><span>赋能老师数</span></div>
       <div class="metric metric-dialogue"><strong id="services">104,752</strong><em>次</em><span>辅助工作数</span></div>
+      <div class="metric metric-task"><strong id="tasks">28,940</strong><em>次</em><span>执行任务数</span></div>
       <div class="metric metric-assets"><strong id="resources">7,760</strong><em>项</em><span>资产沉淀</span></div>
     </section>`
   );
@@ -62,7 +63,7 @@
   );
   pages.regional = pages.regional.replace(
     "animateNumber('tasks', rows.reduce((sum, row) => sum + row.tasks, 0));",
-    ""
+    "animateNumber('tasks', rows.reduce((sum, row) => sum + row.tasks, 0));"
   );
   const obsoleteRegionalUpdates = [
     "renderSchoolMetric('school-teacher-list', schoolTeacherBase, scale, '人', '学校使用老师数');",
@@ -75,7 +76,7 @@
   ];
   obsoleteRegionalUpdates.forEach(call => pages.regional = pages.regional.replace(call, ''));
   pages.regional = pages.regional.replace('</body>', `<style>
-    .metric-definitions{height:116px;grid-template-columns:repeat(4,1fr);padding:14px 0 9px}.metric-definitions .metric{min-width:0;padding:0 12px}.metric-definitions .metric::before{width:46px}.metric-definitions .metric strong{font-size:40px}.metric-definitions .metric em{font-size:13px}.metric-definitions .metric span{margin-top:7px;color:#e5edff;font-size:13px;font-weight:700;letter-spacing:.2px}.metric-definitions .metric small{display:block;max-width:260px;margin:5px auto 0;overflow:hidden;color:rgba(184,205,244,.55);font-size:9px;line-height:1.25;white-space:nowrap;text-overflow:ellipsis}.metric-definitions .metric-school small{width:max-content;padding:3px 7px;border:1px solid rgba(47,213,182,.3);border-radius:10px;background:rgba(47,213,182,.08);color:#76e3cf}.metric-definitions .metric-dialogue strong{color:#58d7f5}
+    .metric-definitions{height:116px;grid-template-columns:repeat(5,1fr);padding:14px 0 9px}.metric-definitions .metric{min-width:0;padding:0 10px}.metric-definitions .metric::before{width:42px}.metric-definitions .metric strong{font-size:38px}.metric-definitions .metric em{font-size:13px}.metric-definitions .metric span{margin-top:7px;color:#e5edff;font-size:13px;font-weight:700;letter-spacing:.2px}.metric-definitions .metric small{display:block;max-width:260px;margin:5px auto 0;overflow:hidden;color:rgba(184,205,244,.55);font-size:9px;line-height:1.25;white-space:nowrap;text-overflow:ellipsis}.metric-definitions .metric-school small{width:max-content;padding:3px 7px;border:1px solid rgba(47,213,182,.3);border-radius:10px;background:rgba(47,213,182,.08);color:#76e3cf}.metric-definitions .metric-dialogue strong{color:#58d7f5}
   </style></body>`);
   pages.regional = pages.regional.replace(
     "const [school, detail] = events[index++ % events.length];",

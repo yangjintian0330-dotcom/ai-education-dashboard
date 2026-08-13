@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 const source = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
-assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(4,1fr\)/);
+assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(5,1fr\)/);
 assert.match(source, /class="panel operations-panel"/);
 assert.match(source, /<h2>AI 使用数据<\/h2>/);
 assert.match(source, /class="panel operations-panel asset-panel"><div class="phead"><h2>资产沉淀<\/h2>/);

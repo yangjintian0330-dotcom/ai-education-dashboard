@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const html = fs.readFileSync(new URL('../school-dashboard/index.html', import.meta.url), 'utf8');
-assert.doesNotMatch(html, /<section class="metrics">/);
+assert.match(html, /metric\.className='metrics school-task-metric'/);
+assert.match(html, /id="school-top-tasks"/);
+assert.match(html, /<label>执行任务数<\/label>/);
+assert.match(html, /school-top-tasks'\)\.textContent=fmt\(15241\*rangeScale\(days\)\)/);
 for (const label of ['使用老师数', 'AI 对话次数', 'AI 生成任务数', '内容沉淀数']) {
   assert.match(html, new RegExp(`data-stage-label="${label}"`));
 }
