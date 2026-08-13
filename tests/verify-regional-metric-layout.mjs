@@ -11,6 +11,8 @@ assert.match(source, /regional-operation-side\{grid-template-rows:repeat\(2,minm
 for (const label of ['执行任务数', '词元消耗量', '对话轮数', '资源沉淀数', '资源复用数']) {
   assert.match(source, new RegExp(label));
 }
+assert.match(source, /operations-panel:not\(\.asset-panel\) \.operation-item:first-child\{display:none\}/);
+assert.match(source, /operations-panel:not\(\.asset-panel\) \.operations-body\{--row-count:2!important\}/);
 assert.match(source, /<h2>学校使用排名<\/h2>/);
 assert.match(source, /<h2>学校辅助工作排名<\/h2>/);
 assert.match(source, /unit=type==='teacher'\?' 位老师':' 次'/);

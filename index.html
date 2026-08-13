@@ -129,6 +129,7 @@
     const updateRegionalAssetPie=()=>{const rows=selectedData(),total=rows.reduce((sum,row)=>sum+row.tasks,0)*.268,parts=[.38,.18,.24,.20],keys=['resource','app','knowledge','bank'];$('resources').textContent=fmt(total);$('regional-asset-total').textContent=fmt(total);keys.forEach((key,index)=>$('regional-pie-'+key).innerHTML=fmt(total*parts[index])+'<em>'+(index===0?'项':'个')+'</em>')};
     renderRegionalAssetPie();updateRegionalAssetPie();$('date-start').addEventListener('change',updateRegionalAssetPie);$('date-end').addEventListener('change',updateRegionalAssetPie);
   <\/script></body>`);
+  pages.regional = pages.regional.replace('</body>', '<style>.operations-panel:not(.asset-panel) .operations-body{--row-count:2!important}.operations-panel:not(.asset-panel) .operation-item:first-child{display:none}.operations-panel:not(.asset-panel) .operation-item{padding:22px 0}.operations-panel:not(.asset-panel) .operation-heading strong{font-size:30px}</style></body>');
   document.getElementById('view').srcdoc = pages.regional;
 
   // srcdoc 子页面只能通过 parent 的公开属性读取当前学校；不能依赖顶层 let 变量。
