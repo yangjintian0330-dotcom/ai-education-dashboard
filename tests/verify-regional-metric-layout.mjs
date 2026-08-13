@@ -5,6 +5,9 @@ const source = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8'
 
 assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(3,1fr\)/);
 assert.match(source, /class="panel operations-panel"/);
+assert.match(source, /<h2>AI 赋能成果<\/h2>/);
+assert.match(source, /class="panel operations-panel asset-panel"><div class="phead"><h2>资产沉淀<\/h2>/);
+assert.match(source, /regional-operation-side\{display:grid!important;grid-template-rows:3fr 2fr/);
 for (const label of ['执行任务数', '词元消耗量', '对话轮数', '资源沉淀数', '资源复用数']) {
   assert.match(source, new RegExp(label));
 }
