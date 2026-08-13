@@ -12,5 +12,7 @@ assert.match(html, /\.wheel-feed \.query-teacher\{/);
 assert.match(html, /\.wheel-feed \.query-content\{/);
 assert.match(html, /school-region-feed/);
 assert.match(html, /@keyframes school-regional-feed/);
+assert.match(html, /老师实时提问/);
+assert.match(html, /height:132px;flex:0 0 132px/);
 
 console.log('school query feed verified');
