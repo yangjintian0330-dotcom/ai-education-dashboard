@@ -11,8 +11,9 @@ assert.match(source, /regional-operation-side\{display:grid!important;grid-templ
 for (const label of ['执行任务数', '词元消耗量', '对话轮数', '资源沉淀数', '资源复用数']) {
   assert.match(source, new RegExp(label));
 }
-assert.match(source, /学校使用老师数排名/);
-assert.match(source, /学校使用对话数排名/);
+assert.match(source, /<h2>学校使用排名<\/h2>/);
+assert.match(source, /<h2>学校辅助工作排名<\/h2>/);
+assert.match(source, /unit=type==='teacher'\?' 位老师':' 次'/);
 assert.match(source, /class="rank-visual lollipop-ranking"/);
 assert.match(source, /class="rank-visual energy-ranking"/);
 assert.match(source, /function renderRegionalMetricLayout/);
