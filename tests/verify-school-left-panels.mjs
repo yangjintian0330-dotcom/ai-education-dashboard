@@ -14,11 +14,16 @@ assert.match(html, /class="school-asset-donut"/);
 assert.match(html, /class="school-asset-pie-legend"/);
 assert.match(html, /const updateSchoolAssetPie=/);
 assert.match(html, /const renderSchoolUsageDepth=/);
-assert.match(html, /school-left\{grid-template-rows:2fr 3fr!important/);
+assert.match(html, /<h2>年级学科使用量<\/h2>/);
+assert.match(html, /id="grade-subject-usage"/);
+assert.match(html, /id="grade-subject-pager"/);
+assert.match(html, /const gradeSubjectUsage=/);
+assert.match(html, /const updateGradeSubjectUsage=/);
+assert.match(html, /school-left\{grid-template-rows:minmax\(0,1\.15fr\) minmax\(0,1\.8fr\) minmax\(0,2\.05fr\)!important/);
 const usageDepth = html.slice(html.indexOf('const renderSchoolUsageDepth='), html.indexOf('const renderSchoolAssetPie='));
 assert.doesNotMatch(usageDepth, />执行任务数</);
 assert.match(html, /grid-template-rows:repeat\(2,minmax\(0,1fr\)\)!important/);
-assert.doesNotMatch(html, /年级 \/ 学科使用次数|grade-subject-usage|school-cap-pager/);
+for (const label of ['七年级数学', '七年级语文', '八年级英语']) assert.match(html, new RegExp(label));
 assert.doesNotMatch(html, /<h2>区域使用趋势<\/h2>/);
 
 console.log('school left panels verified');
