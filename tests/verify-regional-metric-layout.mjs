@@ -23,5 +23,6 @@ assert.match(source, /regional-rank-side\{display:grid;grid-template-rows:repeat
 
 const finalLayout = source.slice(source.lastIndexOf('function renderRegionalMetricLayout'), source.lastIndexOf('function rankRowsMarkup'));
 assert.doesNotMatch(finalLayout, /AI 能力使用排名|capability-treemap|task-stack-chart|token-spark-area|turn-ring-chart|asset-ring-chart|reuse-segments/);
+assert.doesNotMatch(finalLayout, /operation-note|<small/);
 
 console.log('regional metric layout verified');
