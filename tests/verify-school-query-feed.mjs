@@ -11,8 +11,12 @@ assert.match(html, /\.wheel-feed \.query-school\{/);
 assert.match(html, /\.wheel-feed \.query-teacher\{/);
 assert.match(html, /\.wheel-feed \.query-content\{/);
 assert.match(html, /school-region-feed/);
-assert.match(html, /@keyframes school-regional-feed/);
-assert.match(html, /老师实时提问/);
+assert.match(html, /school-feed-stack/);
+assert.match(html, /\.school-region-feed>\.link-item\{display:none!important\}/);
+assert.match(html, /\.school-feed-stack \.link-item\{position:relative!important/);
+assert.match(html, /animation:none!important/);
+assert.match(html, /const renderSchoolFeed=/);
+assert.match(html, /renderSchoolFeed\(\)},2200\)/);
 assert.match(html, /height:132px;flex:0 0 132px/);
 
 console.log('school query feed verified');
