@@ -5,7 +5,7 @@ const source = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8'
 
 assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(3,1fr\)/);
 assert.match(source, /class="panel operations-panel"/);
-assert.match(source, /<h2>AI 赋能成果<\/h2>/);
+assert.match(source, /<h2>AI 使用数据<\/h2>/);
 assert.match(source, /class="panel operations-panel asset-panel"><div class="phead"><h2>资产沉淀<\/h2>/);
 assert.match(source, /regional-operation-side\{display:grid!important;grid-template-rows:3fr 2fr/);
 for (const label of ['执行任务数', '词元消耗量', '对话轮数', '资源沉淀数', '资源复用数']) {
@@ -24,5 +24,6 @@ assert.match(source, /regional-rank-side\{display:grid;grid-template-rows:repeat
 const finalLayout = source.slice(source.lastIndexOf('function renderRegionalMetricLayout'), source.lastIndexOf('function rankRowsMarkup'));
 assert.doesNotMatch(finalLayout, /AI 能力使用排名|capability-treemap|task-stack-chart|token-spark-area|turn-ring-chart|asset-ring-chart|reuse-segments/);
 assert.doesNotMatch(finalLayout, /operation-note|<small/);
+assert.doesNotMatch(finalLayout, /当前筛选周期|区域资产|AI 赋能成果/);
 
 console.log('regional metric layout verified');
