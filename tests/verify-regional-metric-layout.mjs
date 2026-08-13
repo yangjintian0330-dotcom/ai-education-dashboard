@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 const source = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
-assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(3,1fr\)/);
+assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(4,1fr\)/);
 assert.match(source, /class="panel operations-panel"/);
 assert.match(source, /<h2>AI 使用数据<\/h2>/);
 assert.match(source, /class="panel operations-panel asset-panel"><div class="phead"><h2>资产沉淀<\/h2>/);
@@ -21,6 +21,8 @@ assert.match(source, /function updateRegionalMetricLayout/);
 assert.match(source, /schoolTeacherBase\.map\(item=>\(\{name:item\[0\],value:/);
 assert.match(source, /grid-template-columns:260px minmax\(0,1fr\) 310px/);
 assert.match(source, /regional-rank-side\{display:grid;grid-template-rows:repeat\(2,minmax\(0,1fr\)\)/);
+for (const assetType of ['教学资源', '教学应用', '知识库', '题库']) assert.match(source, new RegExp(assetType));
+assert.match(source, /const updateRegionalAssetTypes=/);
 
 const finalLayout = source.slice(source.lastIndexOf('function renderRegionalMetricLayout'), source.lastIndexOf('function rankRowsMarkup'));
 assert.doesNotMatch(finalLayout, /AI 能力使用排名|capability-treemap|task-stack-chart|token-spark-area|turn-ring-chart|asset-ring-chart|reuse-segments/);

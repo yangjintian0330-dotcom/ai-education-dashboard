@@ -7,9 +7,9 @@ const end = source.indexOf(';const escapedCloseTag', start);
 const regional = JSON.parse(source.slice(start, end)).regional;
 const metrics = regional.match(/<section class="metrics">([\s\S]*?)<\/section>/)?.[1] ?? '';
 
-assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(3,1fr\)/);
+assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(4,1fr\)/);
 assert.equal((metrics.match(/class="metric"/g) ?? []).length, 5);
-for (const label of ['应用学校数', '赋能老师数', '辅助工作数']) {
+for (const label of ['应用学校数', '赋能老师数', '辅助工作数', '资产沉淀']) {
   assert.match(source, new RegExp(label));
 }
 assert.doesNotMatch(metrics, /id="students"/);
