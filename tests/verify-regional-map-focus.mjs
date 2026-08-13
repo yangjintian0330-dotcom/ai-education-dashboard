@@ -15,5 +15,8 @@ assert.match(source, /资产复用数/);
 assert.match(source, /\.map-focus-grid\{grid-template-columns:220px minmax\(0,1fr\) 220px/);
 assert.match(source, /\.map-focus-grid \.command\{width:100%;height:100%/);
 assert.match(source, /\.map-focus-grid \.map-shell\{height:100%/);
+for (const obsoleteCall of ['renderSchoolMetric', 'renderCapabilities', 'renderApps', 'updateResources', 'renderRanks']) {
+  assert.match(source, new RegExp(`obsoleteRegionalUpdates.*${obsoleteCall}|${obsoleteCall}.*obsoleteRegionalUpdates`, 's'));
+}
 
 console.log('regional map focus verified');

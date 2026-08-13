@@ -24,5 +24,6 @@ for (const id of ['schools', 'teachers', 'services', 'tasks', 'resources']) {
   assert.match(regional, new RegExp(`animateNumber\\('${id}'`));
 }
 assert.match(source, /coveredSchools\/180\*100/);
+assert.match(source, /pages\.regional = pages\.regional\.replace\(\s*"animateNumber\('resources'/);
 
 console.log('Regional metrics verification passed.');
