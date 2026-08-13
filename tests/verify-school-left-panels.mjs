@@ -18,6 +18,8 @@ assert.match(html, /teacherRanking=document\.querySelector\('\.final-side \.scho
 assert.match(html, /gradePanel\.replaceWith\(teacherRanking\)/);
 assert.match(html, /school-left>\.school-ranking-panel/);
 assert.match(html, /school-left\{grid-template-rows:minmax\(0,1\.15fr\) minmax\(0,1\.8fr\) minmax\(0,2\.05fr\)!important/);
+assert.match(html, /school-left\{grid-template-rows:minmax\(0,2fr\) minmax\(0,3fr\)!important/);
+assert.match(html, /right\.append\(gradeSubjectPanel,teacherRanking\)/);
 const usageDepth = html.slice(html.indexOf('const renderSchoolUsageDepth='), html.indexOf('const renderSchoolAssetPie='));
 assert.doesNotMatch(usageDepth, />执行任务数</);
 assert.match(html, /school-metric-panel:not\(\.school-asset-panel\) \.school-metric-list\{--school-metric-rows:2!important\}/);

@@ -15,6 +15,9 @@ assert.match(html, /renderPager\('teacher-task-list','teacher-task-pager',teache
 assert.match(html, /const renderSchoolRightRankings=/);
 assert.match(html, /teacherUsage=/);
 assert.match(html, /\.final-side\{grid-template-rows:minmax\(0,1fr\)!important\}/);
+assert.match(html, /\.final-side\{grid-template-rows:repeat\(2,minmax\(0,1fr\)\)!important\}/);
+assert.match(html, /workRanking\.remove\(\)/);
+assert.match(html, /right\.append\(gradeSubjectPanel,teacherRanking\)/);
 assert.doesNotMatch(html, /<h2>区域热门 AI 应用<\/h2>/);
 
 console.log('school final dashboard verified');
