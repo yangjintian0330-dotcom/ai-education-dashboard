@@ -24,6 +24,6 @@ assert.match(source, /regional-rank-side\{display:grid;grid-template-rows:repeat
 const finalLayout = source.slice(source.lastIndexOf('function renderRegionalMetricLayout'), source.lastIndexOf('function rankRowsMarkup'));
 assert.doesNotMatch(finalLayout, /AI 能力使用排名|capability-treemap|task-stack-chart|token-spark-area|turn-ring-chart|asset-ring-chart|reuse-segments/);
 assert.doesNotMatch(finalLayout, /operation-note|<small/);
-assert.doesNotMatch(finalLayout, /当前筛选周期|区域资产|AI 赋能成果/);
+assert.doesNotMatch(finalLayout, /当前筛选周期|区域资产|AI 赋能成果|<label>活跃老师<\/label>|<label>对话 ID<\/label>/);
 
 console.log('regional metric layout verified');
