@@ -14,6 +14,7 @@ assert.match(html, /renderPager\('teacher-dialogue-list','teacher-dialogue-pager
 assert.match(html, /renderPager\('teacher-task-list','teacher-task-pager',teacherTasks,'个'\)/);
 assert.match(html, /const renderSchoolRightRankings=/);
 assert.match(html, /teacherUsage=/);
+assert.match(html, /\.final-side\{grid-template-rows:minmax\(0,1fr\)!important\}/);
 assert.doesNotMatch(html, /<h2>区域热门 AI 应用<\/h2>/);
 
 console.log('school final dashboard verified');
