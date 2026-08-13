@@ -13,6 +13,7 @@ assert.match(source, /资源复用数/);
 assert.match(source, /\.map-focus-grid\{grid-template-columns:260px minmax\(0,1fr\) 310px/);
 assert.match(source, /\.map-focus-grid \.command\{width:100%;height:100%/);
 assert.match(source, /\.map-focus-grid \.map-shell\{height:100%/);
+assert.match(source, /pages\.regional = pages\.regional\.replace\(\/<a class="map-panorama"/);
 for (const obsoleteCall of ['renderSchoolMetric', 'renderCapabilities', 'renderApps', 'updateResources', 'renderRanks']) {
   assert.match(source, new RegExp(`obsoleteRegionalUpdates.*${obsoleteCall}|${obsoleteCall}.*obsoleteRegionalUpdates`, 's'));
 }
