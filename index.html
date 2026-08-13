@@ -5,6 +5,9 @@
 <script>
   // Shared dashboard spec: all top-level KPI values use one visual treatment.
   pages.regional = pages.regional.replace(/<a class="map-panorama"[\s\S]*?<\/a>/, '');
+  pages.regional = pages.regional
+    .replace('活跃老师数 <strong class="p">${teachers}</strong>人', '赋能老师数 <strong class="p">${teachers}</strong>人')
+    .replace('对话次数 <strong>${dialogues}</strong>次', '辅助工作数 <strong>${dialogues}</strong>次');
   pages.regional = pages.regional.replace(
     '.metric:nth-child(n+3) strong{color:#ad91ff;text-shadow:0 0 18px rgba(158,130,255,.3)}',
     '.metric strong{color:#ad91ff;text-shadow:0 0 16px rgba(158,130,255,.3)}'

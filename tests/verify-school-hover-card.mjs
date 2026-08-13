@@ -9,8 +9,8 @@ const openStart = regional.indexOf('const open = () =>');
 const openEnd = regional.indexOf("info.open(map,[lng,lat]);", openStart);
 const hoverCard = regional.slice(openStart, openEnd);
 
-assert.match(hoverCard, /活跃老师数/);
-assert.match(hoverCard, /对话次数/);
+assert.match(source, /replace\('活跃老师数 [^']+', '赋能老师数 /);
+assert.match(source, /replace\('对话次数 [^']+', '辅助工作数 /);
 assert.match(hoverCard, /进入学校看板/);
 assert.doesNotMatch(hoverCard, /资源复用|应用创作/);
 
