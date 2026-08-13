@@ -23,7 +23,9 @@ assert.match(source, /grid-template-columns:260px minmax\(0,1fr\) 310px/);
 assert.match(source, /regional-rank-side\{display:grid;grid-template-rows:repeat\(2,minmax\(0,1fr\)\)/);
 for (const assetType of ['教学资源', '教学应用', '知识库', '题库']) assert.match(source, new RegExp(assetType));
 assert.match(source, /const updateRegionalAssetTypes=/);
-assert.match(source, /class="asset-type-track"/);
+assert.match(source, /class="asset-donut"/);
+assert.match(source, /class="asset-pie-legend"/);
+assert.match(source, /const updateRegionalAssetPie=/);
 
 const finalLayout = source.slice(source.lastIndexOf('function renderRegionalMetricLayout'), source.lastIndexOf('function rankRowsMarkup'));
 assert.doesNotMatch(finalLayout, /AI 能力使用排名|capability-treemap|task-stack-chart|token-spark-area|turn-ring-chart|asset-ring-chart|reuse-segments/);
