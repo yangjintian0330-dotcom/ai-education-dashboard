@@ -14,5 +14,11 @@ assert.doesNotMatch(school, /<button class="range on"/);
 assert.match(regional, /name === 'school'[\s\S]*url\.searchParams\.set\('view', 'school'\)/);
 assert.match(regional, /url\.searchParams\.set\('school', window\.currentSchool\)/);
 assert.match(regional, /initialParams\.get\('view'\) === 'school'/);
+assert.match(regional, /pages\.school = pages\.school\.replace/);
+assert.match(regional, /class="school-date-controls"/);
+assert.match(regional, /id="school-date-start"[^>]*type="date"/);
+assert.match(regional, /id="school-date-end"[^>]*type="date"/);
+assert.match(regional, /schoolDateStart\.addEventListener\('change', applySchoolDateRange\)/);
+assert.match(regional, /schoolDateEnd\.addEventListener\('change', applySchoolDateRange\)/);
 
 console.log('school date filter verified');

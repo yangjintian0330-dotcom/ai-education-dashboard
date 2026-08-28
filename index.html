@@ -130,6 +130,34 @@
     renderRegionalAssetPie();updateRegionalAssetPie();$('date-start').addEventListener('change',updateRegionalAssetPie);$('date-end').addEventListener('change',updateRegionalAssetPie);
   <\/script></body>`);
   pages.regional = pages.regional.replace('</body>', '<style>.operations-panel:not(.asset-panel) .operations-body{--row-count:2!important}.operations-panel:not(.asset-panel) .operation-item:first-child{display:none}.operations-panel:not(.asset-panel) .operation-item{padding:22px 0}.operations-panel:not(.asset-panel) .operation-heading strong{font-size:30px}</style></body>');
+  pages.school = pages.school.replace(
+    '<div class="range-controls"><button class="range on" data-days="7">7 天</button><button class="range" data-days="30">30 天</button><button class="range" data-days="90">90 天</button></div>',
+    '<div class="school-date-controls" aria-label="时间范围筛选"><input id="school-date-start" class="school-date-input" type="date" aria-label="开始日期"><span class="school-date-arrow" aria-hidden="true">→</span><input id="school-date-end" class="school-date-input" type="date" aria-label="结束日期"></div>'
+  ).replace('</body>', `<style>
+    .top .back{top:-18px}
+    .school-date-controls{position:absolute;left:0;top:7px;display:flex;align-items:center;height:34px;padding:0 7px;border:1px solid rgba(121,143,187,.28);border-radius:3px;background:rgba(5,8,17,.9);box-shadow:inset 0 0 0 1px rgba(255,255,255,.025)}
+    .school-date-input{width:80px;min-width:0;max-width:80px;height:28px;padding:0 2px;border:0;outline:0;background:transparent;color:#d7dbe5;font-size:9px;color-scheme:dark;cursor:pointer}
+    .school-date-input::-webkit-calendar-picker-indicator{opacity:.72;filter:invert(1);cursor:pointer}.school-date-input:first-child::-webkit-calendar-picker-indicator{display:none}
+    .school-date-arrow{margin:0 3px;color:rgba(210,221,242,.42);font-size:14px}
+  </style><script>
+    (()=>{
+      const schoolDateStart=document.getElementById('school-date-start'),schoolDateEnd=document.getElementById('school-date-end');
+      if(!schoolDateStart||!schoolDateEnd)return;
+      const schoolDateValue=date=>\`${'${date.getFullYear()}'}-${'${String(date.getMonth()+1).padStart(2,\'0\')}'}-${'${String(date.getDate()).padStart(2,\'0\')}'}\`;
+      const schoolToday=new Date();schoolToday.setHours(0,0,0,0);
+      const schoolFirstDate=new Date(schoolToday);schoolFirstDate.setDate(schoolToday.getDate()-6);
+      schoolDateStart.value=schoolDateValue(schoolFirstDate);schoolDateEnd.value=schoolDateValue(schoolToday);
+      const applySchoolDateRange=()=>{
+        const from=new Date(\`${'${schoolDateStart.value}'}T00:00:00\`),to=new Date(\`${'${schoolDateEnd.value}'}T00:00:00\`);
+        if(!Number.isFinite(from.getTime())||!Number.isFinite(to.getTime()))return;
+        const start=from<=to?from:to,end=from<=to?to:from;
+        schoolDateStart.value=schoolDateValue(start);schoolDateEnd.value=schoolDateValue(end);
+        setRange(Math.max(1,Math.round((end-start)/86400000)+1));
+      };
+      schoolDateStart.addEventListener('change', applySchoolDateRange);
+      schoolDateEnd.addEventListener('change', applySchoolDateRange);
+    })();
+  <\/script></body>`);
   document.getElementById('view').srcdoc = pages.regional;
 
   // srcdoc 子页面只能通过 parent 的公开属性读取当前学校；不能依赖顶层 let 变量。
