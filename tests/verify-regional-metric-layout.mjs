@@ -3,6 +3,11 @@ import assert from 'node:assert/strict';
 
 const source = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
+const firstRegionalRender = source.indexOf("}showView('regional');</script></body>");
+const regionalEnhancementsComplete = source.indexOf("document.getElementById('view').srcdoc = pages.regional");
+assert.equal(firstRegionalRender, -1, 'regional dashboard must not render before enhancement assembly completes');
+assert.ok(regionalEnhancementsComplete > source.lastIndexOf('pages.regional = pages.regional.replace'), 'regional dashboard must render after the final regional enhancement');
+
 assert.match(source, /\.metric-definitions\{[^}]*grid-template-columns:repeat\(5,1fr\)/);
 assert.match(source, /class="panel operations-panel"/);
 assert.match(source, /<h2>AI 使用数据<\/h2>/);
