@@ -158,8 +158,6 @@
       schoolDateEnd.addEventListener('change', applySchoolDateRange);
     })();
   <\/script></body>`);
-  document.getElementById('view').srcdoc = pages.regional;
-
   // srcdoc 子页面只能通过 parent 的公开属性读取当前学校；不能依赖顶层 let 变量。
   window.currentSchool = '北京市第四中学';
   window.showView = function (name, schoolName) {
@@ -197,6 +195,8 @@
   if (initialParams.get('view') === 'school') {
     window.currentSchool = initialParams.get('school') || window.currentSchool;
     document.getElementById('view').srcdoc = pages.school;
+  } else {
+    document.getElementById('view').srcdoc = pages.regional;
   }
 </script>
 </html>
