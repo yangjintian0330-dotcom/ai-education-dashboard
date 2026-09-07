@@ -287,4 +287,28 @@ const gradeSubjectUsage=[['七年级数学',328],['七年级语文',296],['八�
 })();
 </script>
 <!-- school-overview-metrics:end -->
+<!-- school-layout-refresh:start -->
+<style>
+.screen{padding:24px 36px!important}
+.top{height:80px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px;border-bottom:1px solid #7799c522}
+.top .title{padding:0!important;min-width:0;flex:1;order:1;text-align:left}.top .title:before,.top .title:after{display:none!important}.top .title h1{font-size:26px!important;letter-spacing:1px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4!important}
+.top .date-controls{position:static!important;order:2;flex-shrink:0;height:36px;border-radius:6px;background:#101b2e}.top .date-input{font-size:12px;width:100px;height:30px}.top .fullscreen{position:static!important;order:3;flex-shrink:0;border-radius:6px}.top .back{top:-15px!important;left:0!important;font-size:10px!important}
+.school-overview-metrics{height:94px;margin:12px 0 18px;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #6381ae22;border-radius:10px;background:linear-gradient(110deg,#18273eaa,#111a30aa)}
+.school-overview-item{justify-content:flex-start;padding:0 28px;gap:20px}.school-overview-item span{font-size:13px;color:#aebed6}.school-overview-item strong,.school-overview-item #gallery-asset-count{margin:0!important;color:#d4c6ff!important;font:700 36px/1.2 "DIN Alternate","PingFang SC",sans-serif!important}.school-overview-item:nth-child(2) strong{color:#65d9ed!important}.school-overview-item:nth-child(3) strong{color:#69dfbf!important}
+.school-overview-metrics+.grid{height:644px!important;grid-template-columns:minmax(0,7fr) minmax(300px,3fr)!important;gap:18px!important}
+.asset-gallery{padding:18px;border-radius:10px;border-color:#6381ae2b;background:linear-gradient(150deg,#14213a99,#0c142899)}.gallery-head{height:28px;margin-bottom:14px;flex-shrink:0}.gallery-head h2{font-size:17px}.gallery-head .gallery-footer{min-height:0;margin:0;gap:8px}.gallery-footer button{padding:3px 10px;background:#1a2a43;border-color:#6381ae44}.gallery-cards{gap:14px}.gallery-card{padding:6px;border-radius:10px;box-shadow:0 3px 12px #0002}.gallery-cover{border-radius:6px;min-height:100px}.gallery-name{font-size:14px;margin:9px 8px 4px}.gallery-author{font-size:10px;margin:2px 8px 7px}.gallery-feedback{margin-top:6px;min-height:12px;font-size:10px}
+.final-side{grid-template-rows:116px minmax(0,1fr) minmax(0,1fr)!important;gap:14px!important}.school-conversations,.final-side>.panel{border:1px solid #6381ae2b!important;border-radius:10px!important;background:linear-gradient(145deg,#14213aaa,#0d152aaa)!important;overflow:hidden}.school-conversations{display:grid;grid-template-columns:1fr 1fr;padding:14px 16px;column-gap:16px}.school-conversations h2{grid-column:1/-1;font-size:13px;margin:0 0 8px;color:#e2eafa}.conversation-line{padding:0;border-top:0;display:flex;flex-direction:column;align-items:flex-start;gap:5px;font-size:11px}.conversation-line:last-child{padding-left:16px;border-left:1px solid #7799c522}.conversation-line strong{font-size:25px}.final-side>.panel>.phead{height:38px!important;flex-basis:38px!important;padding:0 16px!important;background:#ffffff03!important}.final-side>.panel>.phead h2{font-size:13px!important}.final-side .grade-subject-list,.final-side .school-rank-visual{padding:4px 14px!important}.final-side .school-rank-pager,.final-side .grade-subject-pager{height:27px!important;flex-basis:27px!important}.final-side .panel:before{display:none}
+</style>
+<script>
+(()=>{
+ const overview=document.querySelector('.school-overview-metrics');
+ const count=document.getElementById('gallery-asset-count');
+ const oldLabel=count.parentElement;
+ const metric=document.createElement('div');metric.className='school-overview-item';
+ const label=document.createElement('span');label.textContent='资产沉淀数';
+ const value=document.createElement('div');value.appendChild(count);const unit=document.createElement('em');unit.textContent='项';value.appendChild(unit);metric.append(label,value);overview.appendChild(metric);oldLabel.remove();
+ const gallery=document.querySelector('.asset-gallery');gallery.querySelector('.gallery-head').appendChild(gallery.querySelector('.gallery-footer'));
+})();
+</script>
+<!-- school-layout-refresh:end -->
 </html>
