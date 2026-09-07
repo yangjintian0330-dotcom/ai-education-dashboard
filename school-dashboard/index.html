@@ -260,4 +260,31 @@ const gradeSubjectUsage=[['七年级数学',328],['七年级语文',296],['八�
 })();
 </script>
 <!-- school-asset-gallery:end -->
+<!-- school-overview-metrics:start -->
+<style>
+.school-overview-metrics{height:96px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;margin:0 0 12px;border-bottom:1px solid #587aaa44;background:linear-gradient(90deg,#14223b70,#11182f30)}
+.school-overview-item{display:flex;align-items:center;justify-content:center;gap:22px;min-width:0}.school-overview-item+ .school-overview-item{border-left:1px solid #587aaa44}.school-overview-item span{font-size:15px;color:#dce9fb;font-weight:600}.school-overview-item strong{font:700 38px/1.2 "DIN Alternate","PingFang SC",sans-serif;color:#af97ff;font-variant-numeric:tabular-nums}.school-overview-item:last-child strong{color:#5bd5f0}.school-overview-item em{font-size:12px;color:#a0b7d3;font-style:normal;margin-left:5px}
+.school-overview-metrics+.grid{height:648px!important}
+</style>
+<script>
+(()=>{
+ const grid=document.querySelector('.grid');
+ const overview=document.createElement('section');overview.className='school-overview-metrics';overview.setAttribute('aria-label','学校使用概况');
+ overview.innerHTML='<div class="school-overview-item"><span>使用老师数</span><div><strong id="overview-teachers">0</strong><em>人</em></div></div><div class="school-overview-item"><span>辅助老师工作数</span><div><strong id="overview-work">0</strong><em>次</em></div></div>';
+ grid.before(overview);
+ document.querySelector('.gallery-footer>span')?.remove();
+ document.querySelector('.gallery-footer').style.justifyContent='flex-end';
+ function updateOverview(){
+   const from=new Date(document.getElementById('date-start').value+'T00:00:00'),to=new Date(document.getElementById('date-end').value+'T00:00:00');
+   const days=Number.isFinite(+from)&&Number.isFinite(+to)?Math.max(1,Math.round((to-from)/86400000)+1):7;
+   const scale=rangeScale(days),teachers=Math.round(62*scale),work=Math.round(3817*scale);
+   document.getElementById('overview-teachers').textContent=fmt(teachers);
+   document.getElementById('overview-work').textContent=fmt(work);
+   const turns=Number((document.getElementById('school-op-turns')?.textContent||'0').replace(/[^0-9.]/g,''));
+   document.getElementById('gallery-average').textContent=fmt(teachers?turns/teachers:0);
+ }
+ updateOverview();['date-start','date-end'].forEach(id=>document.getElementById(id).addEventListener('change',updateOverview));
+})();
+</script>
+<!-- school-overview-metrics:end -->
 </html>
