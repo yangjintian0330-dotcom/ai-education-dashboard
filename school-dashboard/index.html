@@ -253,6 +253,10 @@ const gradeSubjectUsage=[['七年级数学',328],['七年级语文',296],['八�
  const metrics=document.createElement('section');metrics.className='school-conversations';metrics.innerHTML='<h2>AI 使用数据</h2><div class="conversation-line"><span>对话总轮数</span><div><strong id="gallery-turns"></strong><em>轮</em></div></div><div class="conversation-line"><span>人均对话轮数</span><div><strong id="gallery-average"></strong><em>轮</em></div></div>';right.prepend(metrics);
  function update(){const node=document.getElementById('school-op-turns');const turns=Number((node?.textContent||'0').replace(/[^0-9.]/g,''));const start=document.getElementById('date-start'),end=document.getElementById('date-end');const days=Math.max(1,Math.round((new Date(end.value)-new Date(start.value))/86400000)+1)||7;const teachers=Math.max(1,Math.round(36*rangeScale(days)));document.getElementById('gallery-turns').textContent=fmt(turns);document.getElementById('gallery-average').textContent=fmt(turns/teachers)}
  update();['date-start','date-end'].forEach(id=>document.getElementById(id).addEventListener('change',update));
+ const assetCountLabel=gallery.querySelector('.gallery-head>span');
+ assetCountLabel.innerHTML='资产沉淀数 <strong id="gallery-asset-count" style="margin:0 5px;color:#6bddf1;font-size:24px;font-variant-numeric:tabular-nums">0</strong> 项';
+ function updateGalleryAssetCount(){document.getElementById('gallery-asset-count').textContent=document.getElementById('school-asset-total')?.textContent||document.getElementById('school-op-assets')?.textContent||'0';}
+ updateGalleryAssetCount();['date-start','date-end'].forEach(id=>document.getElementById(id).addEventListener('change',updateGalleryAssetCount));
 })();
 </script>
 <!-- school-asset-gallery:end -->
