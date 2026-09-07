@@ -139,10 +139,10 @@
     .operations-panel:not(.asset-panel) .operation-item{padding:14px 0}
     .operations-panel:not(.asset-panel) .operation-heading strong{font-size:26px}
   </style><script>
-    document.querySelector('.metric-dialogue span').textContent='辅助教师工作次数';
+    document.querySelector('.metric-dialogue span').textContent='辅助老师工作数';
     const conversationBody=document.querySelector('.operations-panel:not(.asset-panel) .operations-body');
     conversationBody.innerHTML='<span id="op-tasks" hidden></span><span id="op-tokens" hidden></span>'+[['op-turns','对话总轮数','轮'],['op-school-average','校均对话次数','次'],['op-teacher-average','人均对话次数','次']].map(item=>'<section class="operation-item"><div class="operation-heading"><span>'+item[1]+'</span><div><strong id="'+item[0]+'">0</strong><em>'+item[2]+'</em></div></div></section>').join('');
-    document.querySelectorAll('.regional-rank-side .phead h2').forEach((heading,index)=>heading.textContent=index===0?'学校使用老师数':'学校辅助老师工作数');
+    document.querySelectorAll('.regional-rank-side .phead h2').forEach((heading,index)=>heading.textContent=index===0?'使用老师数':'辅助老师工作次数');
     function updateConversationAverages(){
       const rows=selectedData(),total=Math.round(rows.reduce((sum,row)=>sum+row.services,0)*2.735);
       const coverage=Math.max(.35,Math.min(1,rows.length/30));
@@ -191,6 +191,7 @@
     })();
   <\/script></body>`);
   // regional-work-showcase:end
+  pages.regional = pages.regional.replace('</body>', '<style>.regional-operation-side{grid-template-rows:minmax(0,2fr) minmax(0,3fr)!important}.operations-panel:not(.asset-panel) .operations-body{padding:4px 14px}.operations-panel:not(.asset-panel) .operation-item{padding:6px 0}.operations-panel:not(.asset-panel) .operation-heading strong{font-size:24px}.asset-panel .work-preview{min-height:90px}</style></body>');
   pages.school = pages.school.replace(
     '<div class="range-controls"><button class="range on" data-days="7">7 天</button><button class="range" data-days="30">30 天</button><button class="range" data-days="90">90 天</button></div>',
     '<div class="school-date-controls" aria-label="时间范围筛选"><input id="school-date-start" class="school-date-input" type="date" aria-label="开始日期"><span class="school-date-arrow" aria-hidden="true">→</span><input id="school-date-end" class="school-date-input" type="date" aria-label="结束日期"></div>'
