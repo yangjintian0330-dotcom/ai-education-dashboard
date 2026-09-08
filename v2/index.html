@@ -161,8 +161,8 @@
     .asset-summary{display:flex;align-items:baseline;gap:5px;flex-shrink:0}.asset-summary strong{color:#f2f5ff;font:700 29px/1.1 "DIN Alternate",sans-serif}.asset-summary em{font-size:10px;font-style:normal;color:#aebed8}.asset-summary small{margin-left:auto;color:#a6b8d7;font-size:9px}
     .work-card{display:flex;flex:1;min-height:0;flex-direction:column;padding:0;text-align:left;overflow:hidden;border:1px solid rgba(158,130,255,.3);border-radius:9px;background:#111b34;color:#eef3ff;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
     .work-card:hover,.work-card:focus-visible{transform:translateY(-2px);border-color:#68d9f6;box-shadow:0 4px 18px #32c5f425;outline:none}.work-card:active{transform:scale(.985)}
-    .work-preview{position:relative;flex:1;min-height:65px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at 70% 30%,var(--glow),transparent 70%),linear-gradient(135deg,#15263c,#101126)}
-    .work-preview:before{content:"";position:absolute;inset:10px;border:1px solid #ffffff18;border-radius:5px;background:linear-gradient(90deg,transparent 49%,#ffffff06 50%,transparent 51%);background-size:18px 18px}
+    .work-preview{position:relative;flex:1;min-height:65px;width:100%;overflow:hidden;background-color:#15263c;background-size:400% 135%;background-repeat:no-repeat;background-position-y:top}
+    .work-art,.work-tag{display:none}
     .work-art{z-index:1;font-size:42px;text-shadow:0 0 25px var(--glow);letter-spacing:5px}.work-tag{position:absolute;left:13px;top:11px;color:#e1f7ff;font-size:8px;letter-spacing:1px}.work-open{position:absolute;right:9px;bottom:9px;padding:4px 7px;border-radius:4px;background:#081224bb;border:1px solid #ffffff30;font-size:9px;color:#bbecff}.work-card:hover .work-open{background:#1a627c}
     .work-details{padding:9px 10px;flex-shrink:0}.work-title{display:block;font-size:12px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.work-author{display:block;margin-top:5px;color:#aabbd4;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .work-controls{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-shrink:0;font-size:9px;color:#96aacb}.work-controls button{border:1px solid #8a9ac033;border-radius:4px;color:#c5def4;background:#172340;cursor:pointer;padding:2px 7px}.work-controls button:hover{border-color:#64d8fa}.work-controls button:focus-visible{outline:2px solid #64d8fa}.work-notice{font-size:9px;color:#8bdef2;min-height:12px}
@@ -181,7 +181,10 @@
         ['人工智能史诗之旅','陈老师','北京师范大学附属实验中学','互动课程','✦  ⏳','#ad79f277']
       ];
       let index=0;const card=body.querySelector('.work-card'),notice=body.querySelector('.work-notice');
-      function render(){const w=works[index];body.querySelector('.work-title').textContent=w[0];body.querySelector('.work-author').textContent=w[1]+' · '+w[2];body.querySelector('.work-tag').textContent=w[3];body.querySelector('.work-art').textContent=w[4];body.querySelector('.work-preview').style.setProperty('--glow',w[5]);body.querySelector('.work-page').textContent=(index+1)+' / '+works.length;card.setAttribute('aria-label','查看作品：'+w[0]+'（演示）');notice.textContent='';}
+      const hostUrl=new URL(parent.location.href),preview=body.querySelector('.work-preview');
+      const assetPath=hostUrl.pathname.includes('/v2/')?'../school-dashboard/teacher-work-reference.png':'school-dashboard/teacher-work-reference.png';
+      preview.style.backgroundImage='url("'+new URL(assetPath,hostUrl).href+'")';
+      function render(){const w=works[index];body.querySelector('.work-title').textContent=w[0];body.querySelector('.work-author').textContent=w[1]+' · '+w[2];preview.style.backgroundPositionX=(index*100/3)+'%';body.querySelector('.work-page').textContent=(index+1)+' / '+works.length;card.setAttribute('aria-label','查看作品：'+w[0]+'（演示）');notice.textContent='';}
       function move(step){index=(index+step+works.length)%works.length;render();}
       body.querySelector('.work-prev').onclick=()=>move(-1);body.querySelector('.work-next').onclick=()=>move(1);
       card.onclick=()=>{notice.textContent='演示作品：'+works[index][0]+' · 暂未接入链接';};
