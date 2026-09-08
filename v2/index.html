@@ -170,6 +170,7 @@
   </style><script>
     (()=>{
       const panel=document.querySelector('.asset-panel'),body=panel.querySelector('.operations-body');
+      panel.querySelector('.phead h2').textContent='优秀资产';
       const total=$('regional-asset-total').textContent;
       // Preserve the data hooks used by the existing date-filter listeners.
       const hooks=document.createElement('div');hooks.hidden=true;while(body.firstChild)hooks.appendChild(body.firstChild);body.appendChild(hooks);
@@ -188,8 +189,7 @@
       function move(step){index=(index+step+works.length)%works.length;render();}
       body.querySelector('.work-prev').onclick=()=>move(-1);body.querySelector('.work-next').onclick=()=>move(1);
       card.onclick=()=>{notice.textContent='演示作品：'+works[index][0]+' · 暂未接入链接';};
-      const updateTotal=()=>{$('work-asset-total').textContent=$('regional-asset-total').textContent;};
-      ['date-start','date-end'].forEach(id=>$(id).addEventListener('change',updateTotal));
+      body.querySelector('.asset-summary').remove();
       render();setInterval(()=>{if(!document.hidden&&!panel.matches(':hover')&&!panel.contains(document.activeElement)&&!matchMedia('(prefers-reduced-motion: reduce)').matches)move(1);},5000);
     })();
   <\/script></body>`);
