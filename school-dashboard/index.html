@@ -248,8 +248,8 @@ const gradeSubjectUsage=[['七年级数学',328],['七年级语文',296],['八�
  const gallery=document.createElement('section');gallery.className='asset-gallery';gallery.innerHTML='<div class="gallery-head"><h2>优秀案例</h2><span>教师创作 · 校本共享</span></div><div class="gallery-cards"></div><div class="gallery-footer"><span>精选教师作品</span><div><button class="gallery-prev" aria-label="上一页">‹</button> <span class="gallery-page"></span> <button class="gallery-next" aria-label="下一页">›</button></div></div><div class="gallery-feedback" role="status"></div>';grid.insertBefore(gallery,right);
  const schoolName=new URLSearchParams(location.search).get('school')||'北京师范大学附属实验中学';
  const works=[['班级事务管理系统','张老师',0],['AI 智能体工坊','卢老师',1],['熊猫竹博士 · 说明文诊室','刘老师',2],['人工智能史诗之旅','陈老师',3],['班级成长档案','王老师',0],['跨学科智能学习助手','李老师',1],['写作表达训练营','赵老师',2],['科技探索互动课堂','周老师',3]];
- let page=0;function render(){gallery.querySelector('.gallery-cards').replaceChildren();works.slice(page*4,page*4+4).forEach(w=>{const card=document.createElement('button');card.type='button';card.className='gallery-card';card.innerHTML='<div class="gallery-cover"></div><b class="gallery-name"></b><div class="gallery-author"><span></span><i>查看作品 ↗</i></div>';card.querySelector('.gallery-cover').style.backgroundPositionX=(w[2]*100/3)+'%';card.querySelector('.gallery-name').textContent=w[0];card.querySelector('.gallery-author span').textContent=w[1]+' · '+schoolName;card.onclick=()=>{gallery.querySelector('.gallery-feedback').textContent='作品预览：'+w[0]+'（演示，暂未接入链接）'};gallery.querySelector('.gallery-cards').appendChild(card)});gallery.querySelector('.gallery-page').textContent=(page+1)+' / 2';gallery.querySelector('.gallery-prev').disabled=page===0;gallery.querySelector('.gallery-next').disabled=page===1;gallery.querySelector('.gallery-feedback').textContent=''}
- gallery.querySelector('.gallery-prev').onclick=()=>{page=0;render()};gallery.querySelector('.gallery-next').onclick=()=>{page=1;render()};render();
+ let page=0;function render(){gallery.querySelector('.gallery-cards').replaceChildren();works.slice(page*2,page*2+2).forEach(w=>{const card=document.createElement('button');card.type='button';card.className='gallery-card';card.innerHTML='<div class="gallery-cover"></div><b class="gallery-name"></b><div class="gallery-author"><span></span><i>查看作品 ↗</i></div>';card.querySelector('.gallery-cover').style.backgroundPositionX=(w[2]*100/3)+'%';card.querySelector('.gallery-name').textContent=w[0];card.querySelector('.gallery-author span').textContent=w[1]+' · '+schoolName;card.onclick=()=>{gallery.querySelector('.gallery-feedback').textContent='作品预览：'+w[0]+'（演示，暂未接入链接）'};gallery.querySelector('.gallery-cards').appendChild(card)});gallery.querySelector('.gallery-page').textContent=(page+1)+' / '+Math.ceil(works.length/2);gallery.querySelector('.gallery-prev').disabled=page===0;gallery.querySelector('.gallery-next').disabled=page===Math.ceil(works.length/2)-1;gallery.querySelector('.gallery-feedback').textContent=''}
+ gallery.querySelector('.gallery-prev').onclick=()=>{page=Math.max(0,page-1);render()};gallery.querySelector('.gallery-next').onclick=()=>{page=Math.min(Math.ceil(works.length/2)-1,page+1);render()};render();
  const metrics=document.createElement('section');metrics.className='school-conversations';metrics.innerHTML='<h2>AI 使用数据</h2><div class="conversation-line"><span>对话总轮数</span><div><strong id="gallery-turns"></strong><em>轮</em></div></div><div class="conversation-line"><span>人均对话次数</span><div><strong id="gallery-average"></strong><em>次</em></div></div>';right.prepend(metrics);
  function update(){const node=document.getElementById('school-op-turns');const turns=Number((node?.textContent||'0').replace(/[^0-9.]/g,''));const start=document.getElementById('date-start'),end=document.getElementById('date-end');const days=Math.max(1,Math.round((new Date(end.value)-new Date(start.value))/86400000)+1)||7;const teachers=Math.max(1,Math.round(36*rangeScale(days)));document.getElementById('gallery-turns').textContent=fmt(turns);document.getElementById('gallery-average').textContent=fmt(turns/teachers)}
  update();['date-start','date-end'].forEach(id=>document.getElementById(id).addEventListener('change',update));
@@ -314,7 +314,7 @@ const gradeSubjectUsage=[['七年级数学',328],['七年级语文',296],['八�
 <!-- school-capability-sharing:start -->
 <style>
 html,body{min-width:0!important;min-height:100%;overflow:auto!important}
-.screen{width:100%!important;max-width:1920px;margin:0 auto!important;min-height:100vh;height:auto!important}
+.screen{position:relative!important;left:auto!important;top:auto!important;transform:none!important;width:100%!important;max-width:none;margin:0 auto!important;min-height:100vh;height:auto!important}
 .school-overview-metrics+.grid{height:auto!important;min-height:540px;grid-template-rows:minmax(540px,calc(100vh - 540px)) 240px!important}
 .school-insights{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;min-height:0}
 .school-insight{display:flex;flex-direction:column;min-width:0;min-height:0;border:1px solid #6381ae2b;border-radius:10px;background:linear-gradient(145deg,#14213aaa,#0d152aaa);padding:0 16px}
@@ -331,7 +331,7 @@ html,body{min-width:0!important;min-height:100%;overflow:auto!important}
 (()=>{
  // Local sample counts follow the existing school date scaling; no backend is connected.
  const group=document.createElement('section');group.className='school-insights';document.querySelector('.grid').appendChild(group);
- const datasets=[{title:'AI 能力使用次数',unit:'次',cls:'school-abilities',rows:[['AI 组题',864],['AI 生成课件',628],['AI 生成应用',492],['AI 作文学情分析',386],['AI 生成教案',322]]},{title:'学校资源/应用共享度',unit:'项',cls:'school-sharing',rows:[['王老师',86],['李老师',74],['张老师',68],['刘老师',61],['陈老师',56],['赵老师',49]]}];
+ const datasets=[{title:'AI 能力使用次数',unit:'次',cls:'school-abilities',rows:[['AI 组题',864],['AI 生成课件',628],['AI 生成应用',492],['AI 作文学情分析',386],['AI 生成教案',322]]},{title:'学校资源/应用贡献量',unit:'项',cls:'school-sharing',rows:[['王老师',86],['李老师',74],['张老师',68],['刘老师',61],['陈老师',56],['赵老师',49]]}];
  function scale(){const start=new Date(document.getElementById('date-start').value+'T00:00:00'),end=new Date(document.getElementById('date-end').value+'T00:00:00');return rangeScale(Number.isFinite(+start)&&Number.isFinite(+end)?Math.max(1,Math.round((end-start)/86400000)+1):7)}
  datasets.forEach(data=>{
    const panel=document.createElement('article');panel.className='school-insight '+data.cls;panel.innerHTML='<h2></h2><div class="insight-rows"></div><div class="insight-pager"><button type="button" aria-label="上一页">‹</button><span aria-live="polite"></span><button type="button" aria-label="下一页">›</button></div>';panel.querySelector('h2').textContent=data.title;group.appendChild(panel);
@@ -344,4 +344,34 @@ html,body{min-width:0!important;min-height:100%;overflow:auto!important}
 })();
 </script>
 <!-- school-capability-sharing:end -->
+<style>
+.gallery-cards{grid-template-rows:minmax(0,1fr)}
+@media(min-width:1000px) and (min-height:700px){
+ .screen{padding:20px 24px 12px!important;min-height:100vh}
+ .top{height:60px!important}.school-overview-metrics{height:76px;margin:8px 0 12px}
+ .school-overview-metrics+.grid{height:calc(100vh - 188px)!important;min-height:0;grid-template-rows:minmax(0,1fr) 185px!important;gap:12px!important;grid-template-columns:minmax(0,1fr) minmax(320px,.8fr)!important}
+ .asset-gallery{padding:12px;min-height:0}.gallery-head{margin-bottom:8px}.gallery-cover{min-height:70px}.gallery-feedback:empty{display:none}
+ .final-side{grid-template-rows:78px minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important;min-height:0}
+ .school-conversations{padding:8px 12px;row-gap:0}.school-conversations h2{margin-bottom:4px}.conversation-line{gap:2px}.conversation-line strong{font-size:21px}
+ .final-side>.panel>.phead{height:27px!important;flex-basis:27px!important}.final-side .school-rank-pager,.final-side .grade-subject-pager{height:22px!important;flex-basis:22px!important}
+ .school-insights{gap:12px}.school-insight h2{padding:10px 0 7px}.insight-pager{min-height:28px}.insight-value{font-size:20px}
+}
+@media(max-width:760px){.asset-gallery{min-height:300px}.gallery-cards{min-height:210px}}
+</style>
+<!-- readable-layout-guardrails:start -->
+<style>
+/* Minimum row heights take precedence over fitting everything into short windows. */
+.school-overview-metrics+.grid{height:auto!important;min-height:0;grid-template-rows:minmax(560px,1fr) 240px!important}
+.final-side{grid-template-rows:100px minmax(210px,1fr) minmax(210px,1fr)!important}
+.gallery-cards{align-items:start;grid-template-rows:auto;align-content:start}
+.gallery-card{min-width:0}.gallery-cover{flex:none;aspect-ratio:1.76;width:100%;min-height:0!important;background-size:400% 135%}
+.gallery-author{flex-wrap:wrap;row-gap:5px}.gallery-name{line-height:1.5}.gallery-feedback{flex-shrink:0}
+.school-insight{min-height:230px}.insight-row{min-height:44px}
+.final-side>.panel>.phead{height:38px!important;flex-basis:38px!important}
+.final-side .school-rank-pager,.final-side .grade-subject-pager{height:30px!important;flex-basis:30px!important}
+@media(min-width:1000px){.asset-gallery{justify-content:center}.gallery-head{margin-bottom:18px}.gallery-cards{flex:0 0 auto}.school-conversations{padding:12px 16px}}
+@media(max-width:760px){.asset-gallery{min-height:0}.gallery-cards{min-height:0}.final-side{min-height:560px!important}.school-insights{grid-template-columns:1fr}}
+@media(max-width:460px){.gallery-cards{grid-template-columns:1fr}.school-overview-item span{font-size:11px}.gallery-head{height:auto;gap:8px;flex-wrap:wrap}.school-overview-item strong,.school-overview-item #gallery-asset-count{font-size:22px!important}}
+</style>
+<!-- readable-layout-guardrails:end -->
 </html>

@@ -229,11 +229,10 @@
   window.showView = function (name, schoolName) {
     if (schoolName) window.currentSchool = String(schoolName);
     if (name === 'school') {
-      const url = new URL(window.location.href);
-      url.searchParams.set('view', 'school');
+      const base = new URL(window.location.href);
+      const url = new URL(base.pathname.includes('/v2/') ? '../school-dashboard/index.html' : 'school-dashboard/index.html', base);
       url.searchParams.set('school', window.currentSchool);
-      history.pushState({}, '', url);
-      document.getElementById('view').srcdoc = pages.school;
+      window.location.assign(url.href);
       return;
     }
     const url = new URL(window.location.href);
@@ -295,7 +294,7 @@
     Array.from(grid.children).filter(el=>el!==left&&el!==right).forEach(el=>el.classList.add('regional-map-main'));
     grid.appendChild(asset);
     const capability=document.createElement('article');capability.className='panel capability-panel';capability.innerHTML='<div class="phead"><h2>AI 能力使用次数</h2></div><div class="ability-list"></div><div class="mini-pager ability-pager"><button type="button" aria-label="上一页能力">‹</button><span aria-live="polite"></span><button type="button" aria-label="下一页能力">›</button></div>';left.appendChild(capability);
-    const sharing=document.createElement('article');sharing.className='panel sharing-panel';sharing.innerHTML='<div class="phead"><h2>区域资源/应用贡献度</h2><div class="sharing-tabs" role="tablist" aria-label="贡献维度"><button role="tab" id="share-school" aria-controls="share-list" aria-selected="true" data-kind="school">学校</button><button role="tab" id="share-teacher" aria-controls="share-list" aria-selected="false" data-kind="teacher">老师</button></div></div><div class="sharing-list" id="share-list" role="tabpanel" aria-labelledby="share-school"></div>';grid.appendChild(sharing);
+    const sharing=document.createElement('article');sharing.className='panel sharing-panel';sharing.innerHTML='<div class="phead"><h2>区域资源/应用贡献量</h2><div class="sharing-tabs" role="tablist" aria-label="贡献维度"><button role="tab" id="share-school" aria-controls="share-list" aria-selected="true" data-kind="school">学校</button><button role="tab" id="share-teacher" aria-controls="share-list" aria-selected="false" data-kind="teacher">老师</button></div></div><div class="sharing-list" id="share-list" role="tabpanel" aria-labelledby="share-school"></div>';grid.appendChild(sharing);
     const abilities=[['AI 组题',8640],['AI 生成课件',6280],['AI 生成应用',4920],['AI 作文学情分析',3860],['AI 生成教案',3220]];
     const contributions={school:[['北京市第四中学','',426],['北京市第八中学','',358],['北京市第三十五中学','',312],['北京师范大学附属实验中学','',286],['北京市第一六一中学','',245],['北京市第十五中学','',218]],teacher:[['王老师','北京市第四中学',86],['李老师','北京市第八中学',74],['张老师','北京市第三十五中学',68],['刘老师','北京师范大学附属实验中学',61],['陈老师','北京市第一六一中学',56],['赵老师','北京市第十五中学',49]]};
     const bottom=document.createElement('section');bottom.className='regional-bottom';grid.appendChild(bottom);bottom.append(asset,sharing);
@@ -314,10 +313,11 @@
   })();
   <\/script></body>`);
   // regional-sharing-layout:end
+  pages.regional = pages.regional.replace('</body>', '<style>html,body{min-width:0!important;overflow:auto!important}.screen{position:relative!important;transform:none!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;min-height:100vh;margin:0!important;padding:24px!important}.grid.map-focus-grid.regional-expanded{grid-template-rows:minmax(540px,1fr) minmax(290px,auto)!important}.regional-expanded>.regional-map-main{min-height:540px!important}.regional-bottom{min-height:290px}.regional-bottom .work-cards{align-items:start}.regional-bottom .work-preview{flex:none;aspect-ratio:1.76;min-height:0!important}.regional-bottom .work-title{line-height:1.5}.regional-bottom .work-author{white-space:normal;line-height:1.5}.sharing-row{min-height:48px}.regional-bottom .sharing-panel .phead{flex-wrap:wrap;height:auto;min-height:42px;padding-top:8px;padding-bottom:8px;gap:8px}.regional-expanded .phead h2{line-height:1.4}@media(max-width:1000px){.grid.map-focus-grid.regional-expanded{grid-template-rows:540px auto 340px!important}.regional-bottom{grid-template-columns:1fr;gap:14px}.regional-bottom>.panel{min-height:290px}.regional-expanded>.regional-rank-side{min-height:340px}}@media(max-width:640px){.screen{padding:12px!important}.grid.map-focus-grid.regional-expanded{display:flex!important;flex-direction:column}.regional-expanded>.regional-operation-side{min-height:430px}.regional-expanded>.regional-map-main{min-height:480px!important}.regional-expanded>.regional-rank-side{min-height:560px;grid-template-columns:1fr;grid-template-rows:1fr 1fr}.regional-bottom .work-cards{gap:8px}.regional-bottom .work-author{font-size:9px}}</style></body>');
   const initialParams = new URLSearchParams(window.location.search);
   if (initialParams.get('view') === 'school') {
     window.currentSchool = initialParams.get('school') || window.currentSchool;
-    document.getElementById('view').srcdoc = pages.school;
+    window.showView('school', window.currentSchool);
   } else {
     document.getElementById('view').srcdoc = pages.regional;
   }
