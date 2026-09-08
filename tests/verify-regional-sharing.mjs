@@ -1,0 +1,20 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+
+const source = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const frame = { addEventListener() {} };
+const context = { document: { getElementById: () => frame }, window: { location: { search: '', href: 'http://localhost/' } }, URL, URLSearchParams };
+vm.createContext(context);
+for (const script of source.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)) vm.runInContext(script[1], context);
+for (const script of frame.srcdoc.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)) new vm.Script(script[1]);
+for (const label of ['AI 组题', 'AI 生成课件', 'AI 生成应用', 'AI 作文学情分析', 'AI 生成教案', '资源/应用贡献度', '资源/应用优秀案例']) assert.ok(frame.srcdoc.includes(label), label);
+assert.ok(!frame.srcdoc.includes('演示数据'));
+const feature = frame.srcdoc.slice(frame.srcdoc.indexOf('const grid=document.querySelector'));
+assert.ok(feature.includes("scaleFor(selectedData().length)"));
+assert.ok(feature.includes("addEventListener('change',render)"));
+assert.ok(feature.includes("kind=button.dataset.kind"));
+assert.ok(feature.includes("grid.appendChild(asset)"));
+assert.ok(feature.includes("aria-selected"));
+assert.equal(source, fs.readFileSync(new URL('../v2/index.html', import.meta.url), 'utf8'));
+console.log('PASS: regional assembly, script syntax, module content, interaction hooks and entry consistency');

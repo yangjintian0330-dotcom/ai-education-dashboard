@@ -170,7 +170,7 @@
   </style><script>
     (()=>{
       const panel=document.querySelector('.asset-panel'),body=panel.querySelector('.operations-body');
-      panel.querySelector('.phead h2').textContent='优秀案例';
+      panel.querySelector('.phead h2').textContent='区域资源/应用优秀案例';
       const total=$('regional-asset-total').textContent;
       // Preserve the data hooks used by the existing date-filter listeners.
       const hooks=document.createElement('div');hooks.hidden=true;while(body.firstChild)hooks.appendChild(body.firstChild);body.appendChild(hooks);
@@ -185,8 +185,9 @@
       const hostUrl=new URL(parent.location.href),preview=body.querySelector('.work-preview');
       const assetPath=hostUrl.pathname.includes('/v2/')?'../school-dashboard/teacher-work-reference.png':'school-dashboard/teacher-work-reference.png';
       preview.style.backgroundImage='url("'+new URL(assetPath,hostUrl).href+'")';
-      function render(){const w=works[index];body.querySelector('.work-title').textContent=w[0];body.querySelector('.work-author').textContent=w[1]+' · '+w[2];preview.style.backgroundPositionX=(index*100/3)+'%';body.querySelector('.work-page').textContent=(index+1)+' / '+works.length;card.setAttribute('aria-label','查看作品：'+w[0]+'（演示）');notice.textContent='';}
-      function move(step){index=(index+step+works.length)%works.length;render();}
+      const cards=document.createElement('div');cards.className='work-cards';card.before(cards);cards.append(card,card.cloneNode(true));
+      function render(){cards.querySelectorAll('.work-card').forEach((item,offset)=>{const n=(index+offset)%works.length,w=works[n];item.querySelector('.work-title').textContent=w[0];item.querySelector('.work-author').textContent=w[1]+' · '+w[2];item.querySelector('.work-preview').style.backgroundPositionX=(n*100/3)+'%';item.setAttribute('aria-label','查看作品：'+w[0]);item.onclick=()=>{notice.textContent=w[0]+' · 暂未接入链接';};});body.querySelector('.work-page').textContent=(index/2+1)+' / '+Math.ceil(works.length/2);notice.textContent='';}
+      function move(step){index=(index+step*2+works.length)%works.length;render();}
       body.querySelector('.work-prev').onclick=()=>move(-1);body.querySelector('.work-next').onclick=()=>move(1);
       card.onclick=()=>{notice.textContent='演示作品：'+works[index][0]+' · 暂未接入链接';};
       body.querySelector('.asset-summary').remove();
@@ -256,6 +257,63 @@
       window.showView('school', schoolName);
     }, true);
   });
+  // regional-sharing-layout:start — approved local demo; no backend changes.
+  pages.regional = pages.regional.replace('</body>', `<style>
+    .grid.map-focus-grid.regional-expanded{grid-template-columns:280px minmax(0,1fr) 310px!important;grid-template-rows:minmax(420px,1fr) 250px!important;gap:12px;height:auto!important;min-height:calc(100vh - 200px);overflow:visible}
+    .regional-expanded>.regional-operation-side{grid-column:1;grid-row:1;grid-template-rows:190px minmax(0,1fr)!important}
+    .regional-expanded>.regional-rank-side{grid-column:3;grid-row:1}
+    .regional-expanded>.regional-map-main{grid-column:2;grid-row:1;min-height:420px!important;height:100%!important}
+    .regional-bottom{grid-column:1 / -1;grid-row:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;min-height:0}
+    .regional-bottom>.panel{min-width:0;min-height:0}
+    .work-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;flex:1;min-height:0;width:100%}
+    .regional-bottom .work-card{flex-direction:column;align-items:stretch;background:#f9f9f6;border:1px solid #e4e4df;border-radius:10px;padding:5px;color:#19252d}
+    .regional-bottom .work-preview{flex:1;width:100%;border-radius:7px}
+    .regional-bottom .work-details{flex:0 0 auto;min-width:0;padding:6px 5px!important}
+    .regional-bottom .work-title{white-space:nowrap;color:#19252d;font-weight:600}
+    .regional-bottom .work-author{white-space:nowrap;color:#7c887f}
+    .regional-expanded .asset-panel .work-preview{min-height:80px}
+    .regional-expanded .asset-panel .operations-body{gap:5px;padding:8px 12px}
+    .regional-expanded .asset-panel .work-notice:empty{display:none}
+    .regional-expanded .asset-panel .work-details{padding:6px 9px}
+    .regional-expanded .asset-panel .work-title{font-size:11px}
+    .regional-expanded .asset-panel .work-author{margin-top:2px}
+    .capability-panel,.sharing-panel{display:flex;flex-direction:column;min-height:0;background:#0c1730;border:1px solid #334869}
+    .regional-expanded .phead h2{font-size:14px}.regional-expanded .phead{flex:0 0 38px}
+    .demo-label{font-size:9px;color:#90a9c8;letter-spacing:1px}
+    .ability-list{display:grid;grid-template-rows:repeat(3,1fr);flex:1;padding:6px 14px;min-height:0}
+    .ability-row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff0b;font-size:11px;gap:8px}.ability-row:last-child{border:0}
+    .ability-row span:before{content:'';display:inline-block;width:5px;height:5px;background:#40c9ed;margin-right:8px}.ability-row strong{font:700 18px 'DIN Alternate',sans-serif;color:#6edcf5}.ability-row small{font-size:9px;color:#9ab0ce;margin-left:4px;font-weight:400}
+    .sharing-panel .phead{display:flex;gap:14px;align-items:center}.sharing-tabs{display:flex;gap:4px;margin-left:auto}.sharing-tabs button{padding:4px 13px;border:1px solid #344767;background:#111e36;color:#9eb2ce;border-radius:4px;cursor:pointer;font-size:11px}.sharing-tabs button[aria-selected=true]{background:#214356;color:#87e9ee;border-color:#40868c}.sharing-tabs button:focus-visible{outline:2px solid #80e1f0}
+    .sharing-caption{display:flex;justify-content:space-between;padding:8px 15px;color:#9fb4d1;font-size:10px}
+    .sharing-list{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);grid-auto-flow:column;gap:0 26px;flex:1;min-height:0;padding:0 15px 10px}
+    .sharing-row{display:flex;align-items:center;gap:10px;border-bottom:1px solid #ffffff0d;min-width:0}.sharing-order{color:#51cecb;font:12px monospace}.sharing-name{font-size:11px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sharing-name small{display:block;color:#8197b6;font-size:9px;margin-top:3px}.sharing-row strong{font:700 20px 'DIN Alternate',sans-serif;color:#e4f5fa}.sharing-row em{font-size:9px;color:#8fa8c8;font-style:normal}
+    @media(max-width:1000px){.grid.map-focus-grid.regional-expanded{grid-template-columns:240px minmax(320px,1fr)!important;grid-template-rows:500px 250px 260px!important}.regional-expanded>.regional-rank-side{grid-column:1 / 3;grid-row:3;grid-template-columns:1fr 1fr;grid-template-rows:1fr}.regional-expanded>.sharing-panel{grid-column:2;grid-row:2}.sharing-list{gap:0 10px}.sharing-name{font-size:10px}}
+  </style><script>
+  (()=>{
+    const grid=document.querySelector('.map-focus-grid'),left=grid.querySelector('.regional-operation-side'),right=grid.querySelector('.regional-rank-side'),asset=left.querySelector('.asset-panel');
+    grid.classList.add('regional-expanded');
+    Array.from(grid.children).filter(el=>el!==left&&el!==right).forEach(el=>el.classList.add('regional-map-main'));
+    grid.appendChild(asset);
+    const capability=document.createElement('article');capability.className='panel capability-panel';capability.innerHTML='<div class="phead"><h2>AI 能力使用次数</h2></div><div class="ability-list"></div><div class="mini-pager ability-pager"><button type="button" aria-label="上一页能力">‹</button><span aria-live="polite"></span><button type="button" aria-label="下一页能力">›</button></div>';left.appendChild(capability);
+    const sharing=document.createElement('article');sharing.className='panel sharing-panel';sharing.innerHTML='<div class="phead"><h2>区域资源/应用贡献度</h2><div class="sharing-tabs" role="tablist" aria-label="贡献维度"><button role="tab" id="share-school" aria-controls="share-list" aria-selected="true" data-kind="school">学校</button><button role="tab" id="share-teacher" aria-controls="share-list" aria-selected="false" data-kind="teacher">老师</button></div></div><div class="sharing-list" id="share-list" role="tabpanel" aria-labelledby="share-school"></div>';grid.appendChild(sharing);
+    const abilities=[['AI 组题',8640],['AI 生成课件',6280],['AI 生成应用',4920],['AI 作文学情分析',3860],['AI 生成教案',3220]];
+    const contributions={school:[['北京市第四中学','',426],['北京市第八中学','',358],['北京市第三十五中学','',312],['北京师范大学附属实验中学','',286],['北京市第一六一中学','',245],['北京市第十五中学','',218]],teacher:[['王老师','北京市第四中学',86],['李老师','北京市第八中学',74],['张老师','北京市第三十五中学',68],['刘老师','北京师范大学附属实验中学',61],['陈老师','北京市第一六一中学',56],['赵老师','北京市第十五中学',49]]};
+    const bottom=document.createElement('section');bottom.className='regional-bottom';grid.appendChild(bottom);bottom.append(asset,sharing);
+    let kind='school',abilityPage=0;
+    const sharePages={school:0,teacher:0},sharePageSize=3;
+    sharing.insertAdjacentHTML('beforeend','<div class="mini-pager sharing-pager"><button type="button" aria-label="上一页贡献排名">‹</button><span aria-live="polite"></span><button type="button" aria-label="下一页贡献排名">›</button></div>');
+    sharing.querySelector('.sharing-list').style.gridTemplateColumns='minmax(0,1fr)';
+    const sharePager=sharing.querySelector('.sharing-pager'),shareButtons=sharePager.querySelectorAll('button');
+    shareButtons.forEach((button,i)=>button.onclick=()=>{sharePages[kind]=Math.max(0,Math.min(Math.ceil(contributions[kind].length/sharePageSize)-1,sharePages[kind]+(i===0?-1:1)));render()});
+    const abilityPageSize=3,abilityPages=Math.ceil(abilities.length/abilityPageSize),pager=capability.querySelector('.ability-pager'),pageButtons=pager.querySelectorAll('button');
+    pageButtons.forEach((button,i)=>button.onclick=()=>{abilityPage=Math.max(0,Math.min(abilityPages-1,abilityPage+(i===0?-1:1)));render()});
+    function render(){const scale=scaleFor(selectedData().length),sharePage=sharePages[kind],shareCount=Math.ceil(contributions[kind].length/sharePageSize);sharePager.querySelector('span').textContent=(sharePage+1)+' / '+shareCount;shareButtons[0].disabled=sharePage===0;shareButtons[1].disabled=sharePage===shareCount-1;pager.querySelector('span').textContent=(abilityPage+1)+' / '+abilityPages;pageButtons[0].disabled=abilityPage===0;pageButtons[1].disabled=abilityPage===abilityPages-1;capability.querySelector('.ability-list').innerHTML=abilities.slice(abilityPage*abilityPageSize,(abilityPage+1)*abilityPageSize).map(item=>'<div class="ability-row"><span>'+item[0]+'</span><strong>'+fmt(Math.round(item[1]*scale))+'<small>次</small></strong></div>').join('');sharing.querySelector('.sharing-list').innerHTML=contributions[kind].slice(sharePage*sharePageSize,(sharePage+1)*sharePageSize).map((item,i)=>'<div class="sharing-row"><span class="sharing-order">0'+(sharePage*sharePageSize+i+1)+'</span><span class="sharing-name" title="'+item[0]+'">'+item[0]+(item[1]?'<small>'+item[1]+'</small>':'')+'</span><strong>'+fmt(Math.round(item[2]*scale))+'</strong><em>项</em></div>').join('');}
+    const tabs=Array.from(sharing.querySelectorAll('[role=tab]'));
+    tabs.forEach((button,i)=>{button.onclick=()=>{kind=button.dataset.kind;tabs.forEach(b=>{b.setAttribute('aria-selected',String(b===button));b.tabIndex=b===button?0:-1});sharing.querySelector('[role=tabpanel]').setAttribute('aria-labelledby',button.id);render()};button.tabIndex=i===0?0:-1;button.onkeydown=event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const next=tabs[event.key==='Home'?0:event.key==='End'?1:1-i];next.click();next.focus()}}});
+    ['date-start','date-end'].forEach(id=>document.getElementById(id).addEventListener('change',render));render();requestAnimationFrame(()=>dispatchEvent(new Event('resize')));
+  })();
+  <\/script></body>`);
+  // regional-sharing-layout:end
   const initialParams = new URLSearchParams(window.location.search);
   if (initialParams.get('view') === 'school') {
     window.currentSchool = initialParams.get('school') || window.currentSchool;
