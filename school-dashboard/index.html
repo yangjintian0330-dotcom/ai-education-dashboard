@@ -311,4 +311,37 @@ const gradeSubjectUsage=[['七年级数学',328],['七年级语文',296],['八�
 })();
 </script>
 <!-- school-layout-refresh:end -->
+<!-- school-capability-sharing:start -->
+<style>
+html,body{min-width:0!important;min-height:100%;overflow:auto!important}
+.screen{width:100%!important;max-width:1920px;margin:0 auto!important;min-height:100vh;height:auto!important}
+.school-overview-metrics+.grid{height:auto!important;min-height:540px;grid-template-rows:minmax(540px,calc(100vh - 540px)) 240px!important}
+.school-insights{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;min-height:0}
+.school-insight{display:flex;flex-direction:column;min-width:0;min-height:0;border:1px solid #6381ae2b;border-radius:10px;background:linear-gradient(145deg,#14213aaa,#0d152aaa);padding:0 16px}
+.school-insight h2{font-size:15px;margin:0;padding:14px 0 10px;border-bottom:1px solid #6381ae22}
+.insight-rows{flex:1;display:grid;grid-template-rows:repeat(3,minmax(0,1fr));min-height:0}
+.insight-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid #6381ae18;min-width:0;font-size:12px}
+.insight-order{font:12px monospace;color:#829ac1}.insight-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.insight-value{font:700 23px 'DIN Alternate',sans-serif;color:#65d9ed}.school-sharing .insight-value{color:#69dfbf}.insight-unit{font-size:10px;color:#9fb3ce}
+.insight-pager{display:flex;justify-content:center;align-items:center;gap:12px;min-height:36px;font-size:11px;color:#9fb3ce}.insight-pager button{border:1px solid #6381ae44;border-radius:4px;background:#1a2a43;color:#c9eaff;padding:3px 10px;cursor:pointer}.insight-pager button:disabled{opacity:.3;cursor:default}.insight-pager button:focus-visible{outline:2px solid #65d9ed}
+.gallery-author span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.gallery-author i{flex-shrink:0}
+@media(max-width:1100px){.screen{padding:24px!important}.school-overview-item{padding:0 16px;gap:12px}.school-overview-item span{font-size:12px}.school-overview-item strong,.school-overview-item #gallery-asset-count{font-size:28px!important}.school-overview-metrics+.grid{grid-template-columns:minmax(0,1fr) 280px!important}.top .title h1{font-size:20px!important}.gallery-author{flex-wrap:wrap}.gallery-head h2{font-size:15px}}
+@media(max-width:760px){.screen{padding:20px 12px!important}.top{height:auto!important;min-height:110px;flex-wrap:wrap;gap:10px}.top .title{flex-basis:100%}.top .title h1{font-size:18px!important;white-space:normal}.top .date-controls{margin-bottom:10px}.school-overview-metrics{height:auto;min-height:90px;gap:4px}.school-overview-item{padding:12px 6px;flex-direction:column;gap:5px;align-items:flex-start}.school-overview-item strong,.school-overview-item #gallery-asset-count{font-size:24px!important}.school-overview-metrics+.grid{display:flex!important;flex-direction:column;gap:14px!important}.asset-gallery{min-height:540px;padding:12px}.gallery-cards{min-height:440px;gap:10px}.gallery-name{font-size:12px;margin-left:3px}.gallery-author{font-size:9px;margin-left:3px}.final-side{min-height:560px!important;display:grid!important}.school-insights{grid-template-columns:minmax(0,1fr);gap:14px}.school-insight{height:240px}.gallery-feedback:empty{display:none}}
+</style>
+<script>
+(()=>{
+ // Local sample counts follow the existing school date scaling; no backend is connected.
+ const group=document.createElement('section');group.className='school-insights';document.querySelector('.grid').appendChild(group);
+ const datasets=[{title:'AI 能力使用次数',unit:'次',cls:'school-abilities',rows:[['AI 组题',864],['AI 生成课件',628],['AI 生成应用',492],['AI 作文学情分析',386],['AI 生成教案',322]]},{title:'学校资源/应用共享度',unit:'项',cls:'school-sharing',rows:[['王老师',86],['李老师',74],['张老师',68],['刘老师',61],['陈老师',56],['赵老师',49]]}];
+ function scale(){const start=new Date(document.getElementById('date-start').value+'T00:00:00'),end=new Date(document.getElementById('date-end').value+'T00:00:00');return rangeScale(Number.isFinite(+start)&&Number.isFinite(+end)?Math.max(1,Math.round((end-start)/86400000)+1):7)}
+ datasets.forEach(data=>{
+   const panel=document.createElement('article');panel.className='school-insight '+data.cls;panel.innerHTML='<h2></h2><div class="insight-rows"></div><div class="insight-pager"><button type="button" aria-label="上一页">‹</button><span aria-live="polite"></span><button type="button" aria-label="下一页">›</button></div>';panel.querySelector('h2').textContent=data.title;group.appendChild(panel);
+   let page=0;const size=3,pages=Math.ceil(data.rows.length/size),buttons=panel.querySelectorAll('button');
+   buttons[0].setAttribute('aria-label',data.title+'上一页');buttons[1].setAttribute('aria-label',data.title+'下一页');
+   function render(){const factor=scale();panel.querySelector('.insight-rows').innerHTML=data.rows.slice(page*size,(page+1)*size).map((row,i)=>'<div class="insight-row"><span class="insight-order">'+String(page*size+i+1).padStart(2,'0')+'</span><span class="insight-name">'+row[0]+'</span><strong class="insight-value">'+fmt(row[1]*factor)+'</strong><span class="insight-unit">'+data.unit+'</span></div>').join('');panel.querySelector('.insight-pager span').textContent=(page+1)+' / '+pages;buttons[0].disabled=page===0;buttons[1].disabled=page===pages-1}
+   buttons.forEach((button,i)=>button.onclick=()=>{page=Math.max(0,Math.min(pages-1,page+(i===0?-1:1)));render()});['date-start','date-end'].forEach(id=>document.getElementById(id).addEventListener('change',render));render();
+ });
+ window.dispatchEvent(new Event('resize'));
+})();
+</script>
+<!-- school-capability-sharing:end -->
 </html>
