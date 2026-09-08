@@ -8,7 +8,7 @@ const context = { document: { getElementById: () => frame }, window: { location:
 vm.createContext(context);
 for (const script of source.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)) vm.runInContext(script[1], context);
 for (const script of frame.srcdoc.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)) new vm.Script(script[1]);
-for (const label of ['AI 组题', 'AI 生成课件', 'AI 生成应用', 'AI 作文学情分析', 'AI 生成教案', '资源/应用贡献量', '资源/应用优秀案例']) assert.ok(frame.srcdoc.includes(label), label);
+for (const label of ['AI 组题', 'AI 生成课件', 'AI 生成应用', 'AI 作文学情分析', 'AI 生成教案', '资源/应用贡献量', '区域优秀资源/应用', 'TOP 10']) assert.ok(frame.srcdoc.includes(label), label);
 assert.ok(!frame.srcdoc.includes('演示数据'));
 const feature = frame.srcdoc.slice(frame.srcdoc.indexOf('const grid=document.querySelector'));
 assert.ok(feature.includes("scaleFor(selectedData().length)"));

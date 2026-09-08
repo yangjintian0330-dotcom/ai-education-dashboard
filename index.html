@@ -170,7 +170,7 @@
   </style><script>
     (()=>{
       const panel=document.querySelector('.asset-panel'),body=panel.querySelector('.operations-body');
-      panel.querySelector('.phead h2').textContent='区域资源/应用优秀案例';
+      panel.querySelector('.phead h2').textContent='区域优秀资源/应用';
       const total=$('regional-asset-total').textContent;
       // Preserve the data hooks used by the existing date-filter listeners.
       const hooks=document.createElement('div');hooks.hidden=true;while(body.firstChild)hooks.appendChild(body.firstChild);body.appendChild(hooks);
@@ -300,13 +300,16 @@
     const bottom=document.createElement('section');bottom.className='regional-bottom';grid.appendChild(bottom);bottom.append(asset,sharing);
     let kind='school',abilityPage=0;
     const sharePages={school:0,teacher:0},sharePageSize=3;
+    contributions.school.push(['北京市第十三中学','',196],['北京市第三十一中学','',182],['北京市第四十三中学','',167],['北京市第六十六中学','',154]);
+    contributions.teacher.push(['孙老师','北京市第十三中学',43],['周老师','北京市第三十一中学',38],['吴老师','北京市第四十三中学',32],['郑老师','北京市第六十六中学',27]);
+    const topLabel=document.createElement('span');topLabel.className='demo-label';topLabel.textContent='TOP 10';sharing.querySelector('.phead h2').after(topLabel);
     sharing.insertAdjacentHTML('beforeend','<div class="mini-pager sharing-pager"><button type="button" aria-label="上一页贡献排名">‹</button><span aria-live="polite"></span><button type="button" aria-label="下一页贡献排名">›</button></div>');
     sharing.querySelector('.sharing-list').style.gridTemplateColumns='minmax(0,1fr)';
     const sharePager=sharing.querySelector('.sharing-pager'),shareButtons=sharePager.querySelectorAll('button');
     shareButtons.forEach((button,i)=>button.onclick=()=>{sharePages[kind]=Math.max(0,Math.min(Math.ceil(contributions[kind].length/sharePageSize)-1,sharePages[kind]+(i===0?-1:1)));render()});
     const abilityPageSize=3,abilityPages=Math.ceil(abilities.length/abilityPageSize),pager=capability.querySelector('.ability-pager'),pageButtons=pager.querySelectorAll('button');
     pageButtons.forEach((button,i)=>button.onclick=()=>{abilityPage=Math.max(0,Math.min(abilityPages-1,abilityPage+(i===0?-1:1)));render()});
-    function render(){const scale=scaleFor(selectedData().length),sharePage=sharePages[kind],shareCount=Math.ceil(contributions[kind].length/sharePageSize);sharePager.querySelector('span').textContent=(sharePage+1)+' / '+shareCount;shareButtons[0].disabled=sharePage===0;shareButtons[1].disabled=sharePage===shareCount-1;pager.querySelector('span').textContent=(abilityPage+1)+' / '+abilityPages;pageButtons[0].disabled=abilityPage===0;pageButtons[1].disabled=abilityPage===abilityPages-1;capability.querySelector('.ability-list').innerHTML=abilities.slice(abilityPage*abilityPageSize,(abilityPage+1)*abilityPageSize).map(item=>'<div class="ability-row"><span>'+item[0]+'</span><strong>'+fmt(Math.round(item[1]*scale))+'<small>次</small></strong></div>').join('');sharing.querySelector('.sharing-list').innerHTML=contributions[kind].slice(sharePage*sharePageSize,(sharePage+1)*sharePageSize).map((item,i)=>'<div class="sharing-row"><span class="sharing-order">0'+(sharePage*sharePageSize+i+1)+'</span><span class="sharing-name" title="'+item[0]+'">'+item[0]+(item[1]?'<small>'+item[1]+'</small>':'')+'</span><strong>'+fmt(Math.round(item[2]*scale))+'</strong><em>项</em></div>').join('');}
+    function render(){const scale=scaleFor(selectedData().length),sharePage=sharePages[kind],shareCount=Math.ceil(contributions[kind].length/sharePageSize);sharePager.querySelector('span').textContent=(sharePage+1)+' / '+shareCount;shareButtons[0].disabled=sharePage===0;shareButtons[1].disabled=sharePage===shareCount-1;pager.querySelector('span').textContent=(abilityPage+1)+' / '+abilityPages;pageButtons[0].disabled=abilityPage===0;pageButtons[1].disabled=abilityPage===abilityPages-1;capability.querySelector('.ability-list').innerHTML=abilities.slice(abilityPage*abilityPageSize,(abilityPage+1)*abilityPageSize).map(item=>'<div class="ability-row"><span>'+item[0]+'</span><strong>'+fmt(Math.round(item[1]*scale))+'<small>次</small></strong></div>').join('');sharing.querySelector('.sharing-list').innerHTML=contributions[kind].slice(sharePage*sharePageSize,(sharePage+1)*sharePageSize).map((item,i)=>'<div class="sharing-row"><span class="sharing-order">'+String(sharePage*sharePageSize+i+1).padStart(2,'0')+'</span><span class="sharing-name" title="'+item[0]+'">'+item[0]+(item[1]?'<small>'+item[1]+'</small>':'')+'</span><strong>'+fmt(Math.round(item[2]*scale))+'</strong><em>项</em></div>').join('');}
     const tabs=Array.from(sharing.querySelectorAll('[role=tab]'));
     tabs.forEach((button,i)=>{button.onclick=()=>{kind=button.dataset.kind;tabs.forEach(b=>{b.setAttribute('aria-selected',String(b===button));b.tabIndex=b===button?0:-1});sharing.querySelector('[role=tabpanel]').setAttribute('aria-labelledby',button.id);render()};button.tabIndex=i===0?0:-1;button.onkeydown=event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const next=tabs[event.key==='Home'?0:event.key==='End'?1:1-i];next.click();next.focus()}}});
     ['date-start','date-end'].forEach(id=>document.getElementById(id).addEventListener('change',render));render();requestAnimationFrame(()=>dispatchEvent(new Event('resize')));
