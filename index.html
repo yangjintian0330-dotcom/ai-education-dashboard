@@ -804,9 +804,33 @@
       evidenceDialog.querySelectorAll('[data-cv-file]').forEach(b=>b.onclick=()=>{const file=(previewFiles[c.id]||[]).find(f=>f.id===b.dataset.cvFile);if(!file)return;evidenceDialog.querySelector('#cv-file-name').textContent=file.name;evidenceDialog.querySelector('.cv-preview-scroll').innerHTML=filePreviewMarkup(file);evidenceDialog.querySelector('.cv-preview-scroll').scrollTop=0;preview.hidden=false;evidenceDialog.dataset.fileOpen='true';evidenceDialog.querySelectorAll('[data-cv-file]').forEach(x=>{x.setAttribute('aria-expanded',String(x===b));x.dataset.selected=String(x===b)});evidenceDialog.querySelector('#cv-hide-preview').focus()});
       evidenceDialog.showModal();transcript.scrollTop=0;evidenceDialog.querySelector('#cv-close').focus();
     }
+    // dialogue-pies:start
+    function dialoguePieGroups(sessions){
+      const directions=[['互动探究资源',/互动|拖动|探究|动画|游戏|滑块/],['练习与分层资源',/组题|题单|练习单|分层|八道题/],['表达与阅读资源',/写作|作文|阅读|原文|诗句|表达/],['评价反馈资源',/评价|成绩|反馈|学情/],['教学准备资源',/教案|备课|课件|教学设计/],['组织管理资源',/管理|班级|事务|分组/],['其他创作需求',null]];
+      const stages=[['练习巩固',/课后|巩固|组题|题单|练习单|八道题/],['课堂导入',/导入|先放|比一比/],['探究与研讨',/探究|预测|拖动|滑块|追问|证据|解释/],['表达与实践',/写作|游戏|问路|表达|实验|学生自己/],['评价与反馈',/评价|成绩|反馈|修改/],['教学准备与组织',null]];
+      const colors=['#a9c9f5','#ffe6a4','#f9c2db','#a9e1de','#b4e9c8','#ffcda9','#c9c4e8'];
+      const texts=sessions.map(messages=>messages.filter(m=>m[0]==='教师').map(m=>m[1]).join('。'));
+      return [directions,stages].map(catalog=>{const rows=catalog.map(([name],i)=>({name,value:0,color:colors[i]}));texts.forEach(text=>{const i=catalog.findIndex(([,rule])=>!rule||rule.test(text));rows[i].value++;});return rows.filter(r=>r.value);});
+    }
+    function dialoguePies(sessions){
+      if(!sessions.length)return '<div class="empty rv-empty">当前筛选下暂无创作对话</div>';
+      const groups=dialoguePieGroups(sessions),total=sessions.length;
+      const css='<style>.dialogue-pies{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;width:100%;min-width:0}.dialogue-pie{min-width:0;margin:0}.dialogue-pie h4{font-size:16px!important;line-height:1.5!important;color:#e4efff!important;margin:0 0 10px!important}.dialogue-pie svg{display:block;width:100%;height:clamp(100px,17vh,170px);margin:0 auto 10px}.dialogue-pie text{fill:#26394e;font:10px sans-serif;text-anchor:middle;dominant-baseline:middle}.dialogue-pie ul{list-style:none;padding:0;margin:0}.dialogue-pie li{display:grid;grid-template-columns:6px minmax(0,1fr) auto;gap:6px;align-items:center;padding:5px 0;border-bottom:1px solid #41617b33;font-size:11px;line-height:1.4;color:#abc2db}.dialogue-pie li i{width:6px;height:6px;border-radius:2px}.dialogue-pie li b{font-weight:500;color:#d4e5f6;font-size:10px;white-space:nowrap}.collaboration-caption{display:flex;justify-content:space-between;gap:8px;color:#8cd9e4;font-size:12px;margin:14px 0 6px}.collaboration-caption small{font-size:10px;color:#91a8c3}@media(max-width:620px){.dialogue-pies{grid-template-columns:1fr}.dialogue-pie svg{height:160px}}</style>';
+      return css+'<div class="dialogue-pies">'+groups.map((rows,index)=>{
+        let angle=-Math.PI/2;
+        const paths=rows.map(row=>{const start=angle;angle+=row.value/total*Math.PI*2;const mid=(angle+start)/2,pct=(row.value/total*100).toFixed(1),title=row.name+'：'+row.value+' 次对话 · '+pct+'%';
+          const d='M100 100 L'+(100+94*Math.cos(start))+' '+(100+94*Math.sin(start))+' A94 94 0 '+(angle-start>Math.PI?1:0)+' 1 '+(100+94*Math.cos(angle))+' '+(100+94*Math.sin(angle))+' Z';
+          return (rows.length===1?'<circle cx="100" cy="100" r="94" fill="'+row.color+'"><title>'+title+'</title></circle>':'<path d="'+d+'" fill="'+row.color+'"><title>'+title+'</title></path>')+'<text x="'+(rows.length===1?100:100+60*Math.cos(mid))+'" y="'+(rows.length===1?100:100+60*Math.sin(mid))+'">'+Math.round(row.value/total*100)+'%</text>';
+        }).join('');
+        return '<figure class="dialogue-pie"><h4>'+['创作方向','教学环节支持方向'][index]+'</h4><svg viewBox="0 0 200 200" role="img" aria-label="'+['创作方向','教学环节支持方向'][index]+'，共'+total+'次对话">'+paths+'</svg><ul>'+rows.map(row=>'<li><i style="background:'+row.color+'"></i><span>'+row.name+'</span><b>'+row.value+' 次 · '+(row.value/total*100).toFixed(1)+'%</b></li>').join('')+'</ul></figure>';
+      }).join('')+'</div>';
+    }
+    // dialogue-pies:end
     function renderInsightPanel(records,panel,isContent){
+      if(isContent){const ids=new Set(records.map(w=>w.id));panel.querySelector('.ri-items').innerHTML=dialoguePies(collaborationCases.filter(c=>ids.has(c.workId)).map(c=>c.evidence));return;}
       const brief=isContent?contentAnalysisBrief(records):analysisBrief(records,false),related=relatedCases(records,isContent);
       panel.querySelector('.ri-items').innerHTML=brief?'<article class="ri-brief"><h4>'+brief.title+'</h4><p>'+brief.body+'</p>'+(isContent?'<h4 class="ri-teaching-title">教学环节支持方向</h4><p>'+brief.teachingBody+'</p>':'')+'<div class="ri-related" aria-label="相关案例">'+related.map(c=>{const p=profiles[c.teacher];return '<div class="ri-related-row"><button type="button" data-related-case="'+c.id+'" aria-haspopup="dialog">'+c.topic+' ↗</button><span>'+p[0]+' · '+p[1]+' · '+p[4]+p[2]+'</span></div>'}).join('')+'</div></article>':'<div class="rv-empty">当前筛选下暂无'+(isContent?'需求分析':'协同分析')+'</div>';
+      const relatedBlock=panel.querySelector('.ri-related');if(relatedBlock)relatedBlock.insertAdjacentHTML('afterbegin','<div class="collaboration-caption"><b>优秀协同案例</b><small>点击查看对话过程 ↗</small></div>');
       panel.querySelectorAll('[data-related-case]').forEach(b=>b.onclick=()=>{insightTrigger=b;openRelated(related.find(c=>c.id===b.dataset.relatedCase),isContent)});
     }
     function baseWorks(){const from=document.getElementById('date-start').value,to=document.getElementById('date-end').value;return works.filter(w=>{const p=profiles[w.teacher];return w.date>=from&&w.date<=to&&(!appliedFilters[0]||p[4]===appliedFilters[0])&&(!appliedFilters[1]||p[2]===appliedFilters[1])&&(!appliedFilters[2]||p[1]===appliedFilters[2])})}

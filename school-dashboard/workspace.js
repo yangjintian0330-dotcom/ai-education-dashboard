@@ -148,10 +148,32 @@
       recentRows=rows.slice().sort((a,b)=>b.date.localeCompare(a.date));recentIndex=0;renderRecent();
     }
     function relatedLinks(rows){return rows.map(r=>'<button type="button" class="related-link" data-record="'+r.id+'"><b>'+escape(r.title)+' ↗</b><span>'+escape(r.teacher)+' · '+r.grade+' · '+r.subject+'</span></button>').join('');}
+    // dialogue-pies:start
+    function dialoguePieGroups(sessions){
+      const directions=[['互动探究资源',/互动|拖动|探究|动画|游戏|滑块/],['练习与分层资源',/组题|题单|练习单|分层|八道题/],['表达与阅读资源',/写作|作文|阅读|原文|诗句|表达/],['评价反馈资源',/评价|成绩|反馈|学情/],['教学准备资源',/教案|备课|课件|教学设计/],['组织管理资源',/管理|班级|事务|分组/],['其他创作需求',null]];
+      const stages=[['练习巩固',/课后|巩固|组题|题单|练习单|八道题/],['课堂导入',/导入|先放|比一比/],['探究与研讨',/探究|预测|拖动|滑块|追问|证据|解释/],['表达与实践',/写作|游戏|问路|表达|实验|学生自己/],['评价与反馈',/评价|成绩|反馈|修改/],['教学准备与组织',null]];
+      const colors=['#a9c9f5','#ffe6a4','#f9c2db','#a9e1de','#b4e9c8','#ffcda9','#c9c4e8'];
+      const texts=sessions.map(messages=>messages.filter(m=>m[0]==='教师').map(m=>m[1]).join('。'));
+      return [directions,stages].map(catalog=>{const rows=catalog.map(([name],i)=>({name,value:0,color:colors[i]}));texts.forEach(text=>{const i=catalog.findIndex(([,rule])=>!rule||rule.test(text));rows[i].value++;});return rows.filter(r=>r.value);});
+    }
+    function dialoguePies(sessions){
+      if(!sessions.length)return '<div class="empty rv-empty">当前筛选下暂无创作对话</div>';
+      const groups=dialoguePieGroups(sessions),total=sessions.length;
+      const css='<style>.dialogue-pies{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;width:100%;min-width:0}.dialogue-pie{min-width:0;margin:0}.dialogue-pie h4{font-size:16px!important;line-height:1.5!important;color:#e4efff!important;margin:0 0 10px!important}.dialogue-pie svg{display:block;width:100%;height:clamp(100px,17vh,170px);margin:0 auto 10px}.dialogue-pie text{fill:#26394e;font:10px sans-serif;text-anchor:middle;dominant-baseline:middle}.dialogue-pie ul{list-style:none;padding:0;margin:0}.dialogue-pie li{display:grid;grid-template-columns:6px minmax(0,1fr) auto;gap:6px;align-items:center;padding:5px 0;border-bottom:1px solid #41617b33;font-size:11px;line-height:1.4;color:#abc2db}.dialogue-pie li i{width:6px;height:6px;border-radius:2px}.dialogue-pie li b{font-weight:500;color:#d4e5f6;font-size:10px;white-space:nowrap}.collaboration-caption{display:flex;justify-content:space-between;gap:8px;color:#8cd9e4;font-size:12px;margin:14px 0 6px}.collaboration-caption small{font-size:10px;color:#91a8c3}@media(max-width:620px){.dialogue-pies{grid-template-columns:1fr}.dialogue-pie svg{height:160px}}</style>';
+      return css+'<div class="dialogue-pies">'+groups.map((rows,index)=>{
+        let angle=-Math.PI/2;
+        const paths=rows.map(row=>{const start=angle;angle+=row.value/total*Math.PI*2;const mid=(angle+start)/2,pct=(row.value/total*100).toFixed(1),title=row.name+'：'+row.value+' 次对话 · '+pct+'%';
+          const d='M100 100 L'+(100+94*Math.cos(start))+' '+(100+94*Math.sin(start))+' A94 94 0 '+(angle-start>Math.PI?1:0)+' 1 '+(100+94*Math.cos(angle))+' '+(100+94*Math.sin(angle))+' Z';
+          return (rows.length===1?'<circle cx="100" cy="100" r="94" fill="'+row.color+'"><title>'+title+'</title></circle>':'<path d="'+d+'" fill="'+row.color+'"><title>'+title+'</title></path>')+'<text x="'+(rows.length===1?100:100+60*Math.cos(mid))+'" y="'+(rows.length===1?100:100+60*Math.sin(mid))+'">'+Math.round(row.value/total*100)+'%</text>';
+        }).join('');
+        return '<figure class="dialogue-pie"><h4>'+['创作方向','教学环节支持方向'][index]+'</h4><svg viewBox="0 0 200 200" role="img" aria-label="'+['创作方向','教学环节支持方向'][index]+'，共'+total+'次对话">'+paths+'</svg><ul>'+rows.map(row=>'<li><i style="background:'+row.color+'"></i><span>'+row.name+'</span><b>'+row.value+' 次 · '+(row.value/total*100).toFixed(1)+'%</b></li>').join('')+'</ul></figure>';
+      }).join('')+'</div>';
+    }
+    // dialogue-pies:end
     function renderResearch(){const rows=research(),summary=summarize(data,rows),a=analyze(data,rows);const ranking=summary.ranking.slice().sort((x,y)=>y[sort]-x[sort]||x.id.localeCompare(y.id)).slice(0,10);
       $('#teacher-table-body').innerHTML=ranking.map((r,i)=>'<tr><td>'+String(i+1).padStart(2,'0')+'</td><td>'+escape(r.name)+'</td><td>'+r.subject+'<small>'+r.grade+'</small></td><td>'+fmt(r.generated)+'</td><td>'+fmt(r.views)+'</td><td>'+fmt(r.favorites)+'</td></tr>').join('')||'<tr><td colspan="6" class="empty">当前筛选下暂无教师创作</td></tr>';
-      $('#content-analysis').innerHTML=a?'<h4>主要创作方向</h4><p>'+escape(a.content)+'</p><h4>教学环节支持方向</h4><p>'+escape(a.stages)+'</p>'+relatedLinks(a.related):'<p class="empty">当前筛选下暂无创作对话</p>';
-      $('#collaboration-analysis').innerHTML=a?'<h4>教师通过明确要求保留教学判断</h4><p>'+escape(a.collaboration)+'</p>'+relatedLinks(a.related):'<p class="empty">当前筛选下暂无协同分析</p>';
+      $('#content-analysis').innerHTML=dialoguePies(rows.map(r=>r.messages));
+      $('#collaboration-analysis').innerHTML=a?'<h4>教师通过明确要求保留教学判断</h4><p>'+escape(a.collaboration)+'</p><div class="collaboration-caption"><b>优秀协同案例</b><small>点击查看对话过程 ↗</small></div>'+relatedLinks(a.related):'<p class="empty">当前筛选下暂无协同分析</p>';
       $('#filter-summary').textContent=(filters.grade||'全部年级')+' · '+(filters.subject||'全部学科');
       bindRecords($('#content-analysis'));bindRecords($('#collaboration-analysis'));
     }
